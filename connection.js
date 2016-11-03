@@ -7,11 +7,11 @@ function Connection() {
   this.init = function() {
     this.pool = mysql.createPool({
       connectionLimit: 10,
-      host: 'vhw3t8e71xdz9k14.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-      user: 'tyrprj1alvv0rp4p',
-      password: 'm0ejv1kotn6bdv7h',
-      database: 'ah3dpz0d67278it9',
-      port: '3306'
+      host: process.env.MYSQL_HOST || 'vhw3t8e71xdz9k14.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+      user: process.env.MYSQL_USER || 'tyrprj1alvv0rp4p',
+      password: process.env.MYSQL_PASSWORD || 'm0ejv1kotn6bdv7h',
+      database: process.env.MYSQL_DB || 'ah3dpz0d67278it9',
+      port: process.env.MYSQL_PORT || '3306'
     });
   };
  
