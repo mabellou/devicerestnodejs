@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `device_status_user` (
   `userid` int NULL,
   `status` varchar(255),
   `startdate` datetime,
+  `enddate` datetime,
   PRIMARY KEY (`deviceid`, `startdate`),
   FOREIGN KEY (`deviceid`) REFERENCES device(`id`),
   FOREIGN KEY (`userid`) REFERENCES user(`id`)
@@ -123,11 +124,10 @@ INSERT INTO `user_badge` (`userid`, `badgeid`, `startdate`) VALUES
 ('2', 'U9101012', '2016-01-01 08:32:22'),
 ('3', 'U9101013', '2016-01-01 08:32:22');
 
-INSERT INTO `device_status_user` (`deviceid`, `userid`, `status`, `startdate`) VALUES
-('1', '2', 'locked', '2016-03-01 11:22:22'),
-('1', '2', 'inuse', '2016-03-01 11:32:22'),
-('2', '1', 'locked', '2016-02-01 10:22:22'),
-('2', '1', 'inuse', '2016-02-01 10:32:22'),
-('2', NULL, 'available', '2016-08-01 09:32:22');
+INSERT INTO `device_status_user` (`deviceid`, `userid`, `status`, `startdate`, `enddate`) VALUES
+('1', '2', 'locked', '2016-03-01 11:22:22', null),
+('1', '2', 'inuse', '2016-03-01 11:32:22', null),
+('2', '1', 'locked', '2016-02-01 10:22:22', null),
+('2', '1', 'inuse', '2016-02-01 10:32:22', null);
 
 commit;
