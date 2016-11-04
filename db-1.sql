@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `device` (
   `osversion` varchar(255),
   `screensize` varchar(255),
   `companyid` varchar(255),
-  `deviceid` varchar(255),
+  `badgeid` varchar(255),
   `imei` varchar(255),
   `serialnumber` varchar(255),
   `profileid` int,
@@ -84,6 +84,19 @@ CREATE TABLE IF NOT EXISTS `user_badge` (
   FOREIGN KEY (`userid`) REFERENCES user(`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
+
+--
+-- Table structure for table `scan`
+--
+
+CREATE TABLE IF NOT EXISTS `scan` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `entityid` int,
+  `type` varchar(255),
+  `badgeid` varchar(255),
+  `date` datetime,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
 --
 -- Table structure for table `device_status_user`
@@ -130,15 +143,15 @@ INSERT INTO `device_status` (`id`, `status`) VALUES
 ('3', 'locked'),
 ('4', 'unavailable');
 
-INSERT INTO `device` (`id`, `brand`, `model`, `os`, `osversion`, `screensize`, `companyid`, `deviceid`, `imei`, `serialnumber`, `profileid`, `typeid`) VALUES
+INSERT INTO `device` (`id`, `brand`, `model`, `os`, `osversion`, `screensize`, `companyid`, `badgeid`, `imei`, `serialnumber`, `profileid`, `typeid`) VALUES
 ('1', 'Apple', 'Iphone 6', 'IOS', '10.1.1', '4 inch', '405061', '1031', '102030405061', 'D9101011', '1', '1'),
 ('2', 'Samsung', 'Galaxy 3', 'Android', '9.1.2', '5 inch', '405062', '1032', '102030405062', 'D9101012', '2', '1'),
 ('3', 'Microsoft', 'Surface', 'Windows phone', '8.4.1', '2 inch', '405063', '1033', '102030405063', 'D9101013', '3', '2');
 
 INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `startdate`, `enddate`) VALUES
-('1', 'benoit01', 'Benoit', 'Craigh', '1', '2016-01-01 08:32:22', ''),
-('2', 'caroline01', 'Caroline', 'Lopse', '3', '2016-01-01 08:32:22', ''),
-('3', 'vincent01', 'Vincent', 'Ipsum', '2', '2016-01-01 08:32:22', '');
+('1', 'benoit01', 'Benoit', 'Craigh', '1', '2016-01-01 08:32:22', null),
+('2', 'caroline01', 'Caroline', 'Lopse', '3', '2016-01-01 08:32:22', null),
+('3', 'vincent01', 'Vincent', 'Ipsum', '2', '2016-01-01 08:32:22', null);
 
 INSERT INTO `user_badge` (`userid`, `badgeid`, `startdate`) VALUES
 ('1', 'U9101011', '2016-01-01 08:32:22'),
