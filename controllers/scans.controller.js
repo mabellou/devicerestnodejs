@@ -9,7 +9,7 @@ ScansController.create = function(req, res) {
 	var self = this;
   if (!req.body.badgeId) 
     return res.status(400).send({ error : "Bad Request: Missing badgeId" } )
-  console.log("badgeid --> ", !req.body.badgeId);
+  console.log("badgeid --> ", req.body.badgeId);
   user.findByBadge(req.body.badgeId, function(err, user) {
       if (err) { return res.status(500).send({ error : err } ) }
       if (!user) {
