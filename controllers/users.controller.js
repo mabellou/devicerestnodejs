@@ -9,6 +9,7 @@ UsersController.index = function(req, res) {
 
 	User.findAll(function(err, users) {
 		if (err) { return res.status(500).send({ error : err } ) }
+		// do something with async in order to 
 		res.send(indexView.render(users));
 	});
 };

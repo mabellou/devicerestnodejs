@@ -8,5 +8,7 @@ module.exports = {
 
     app.get('/api/v1/users', UsersController.index);
 
+    //app.get('/api/v1/devices', DevicesController.index);
+
   }
 };
