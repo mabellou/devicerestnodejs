@@ -10,7 +10,7 @@ function User(attributes) {
 
 User.findAll = function(callback) {
     connection.acquire(function(err, con) {
-    con.query('select * from user, user_profile, (select DISTINCT(userid), badgeid from user_badge ORDER  BY startdate DESC) user_last_badge where user.id = user_last_badge.userid and user_profile.id = user.profileid', function(err, rows) {
+    con.query('select * from user, user_profile, (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge where user.id = user_last_badge.userid and user_profile.id = user.profileid', function(err, rows) {
       if (err) { return callback(err, rows); }
       var users = rows.map(function (row) {
         return new User(row);

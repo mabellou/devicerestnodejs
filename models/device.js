@@ -49,4 +49,17 @@ Device.findByBadge = function(badgeId, callback) {
   });  
 };
 
+Device.findAll = function(callback) {
+    connection.acquire(function(err, con) {
+    con.query('select * from device, (select deviceid, userid, status, last_status.startdate as statusdate, firstname, lastname from (Select dsu.deviceid, dsu.userid, dsu.status, dsu2.startdate From device_status_user dsu Inner Join (Select deviceid,max(startdate) as startdate From device_status_user Group By deviceid) dsu2 On dsu.deviceid = dsu2.deviceid And dsu.startdate = dsu2.startdate) last_status left join user on user.id = last_status.userid) last_device_user where device.id = last_device_user.deviceid', function(err, rows) {
+      if (err) { return callback(err, rows); }
+      var devices = rows.map(function (row) {
+        return new Device(row);
+      });
+      callback(null, devices);
+      con.release();
+    });
+  });  
+};
+
 module.exports = Device;

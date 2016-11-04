@@ -1,8 +1,8 @@
-var userView = require("./user.view");
+var deviceView = require("./device.view");
 
-function render(users) {
-	return users.map(function(user) {
-		return userView.render(user);
+function render(devices) {
+	return devices.map(function(device) {
+		return deviceView.render(device);
 	});
 }; 
 

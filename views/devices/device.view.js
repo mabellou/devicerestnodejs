@@ -1,17 +1,12 @@
 var moment = require('moment');
 
-function render(user){
+function render(device){
 	return {
-		id: user.id,
-		badgeid: user.badgeid,
-		fullname: user.firstname + ' ' + user.lastname,
-		firstname: user.firstname,
-		lastname: user.lastname,
-		profile: user.profile,
-		startdate: moment(user.startdate).format("DD/MM/YYYY HH:mm:ss"),
-		enddate: user.enddate ? moment(user.enddate).format("DD/MM/YYYY HH:mm:ss") : null,
-		counterlocked: 0,
-		counterinuse: 0
+		id: device.id,
+		brand: device.brand,
+		userid: device.userid,
+		firstname: device.firstname,
+		lastname: device.lastname
 	};
 }; 
 
