@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "badgeid": "ED12312",
+    "fullname": "Benoit Craigh",
+    "firstname": "Benoit",
+    "lastname": "Craigh",
+    "profile": "administrator",
+    "startdate": "2016-01-01T07:32:22.000Z",
+    "enddate": null,
+    "counterlocked": 1,
+    "counterinuse": 2
+  },
+  {
+    "id": 2,
+    "badgeid": "ED12313",
+    "fullname": "Benoit Craigh 2",
+    "firstname": "Benoit",
+    "lastname": "Craigh 2",
+    "profile": "administrator",
+    "startdate": "2016-01-01T07:32:22.000Z",
+    "enddate": null,
+    "counterlocked": 1,
+    "counterinuse": 2
+  }
+]
