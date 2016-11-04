@@ -41,7 +41,10 @@ Device.findByBadge = function(badgeId, callback) {
     con.query('select * from device left join device_status_user on device.id = device_status_user.deviceid where device.badgeid = ? order by startdate desc limit 1', [badgeId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      callback(null, new Device(rows[0]));
+      var newUser = null;
+      if (rows[0])
+        newUser = new User(rows[0]);
+      callback(null, newUser);
     });
   });  
 };
