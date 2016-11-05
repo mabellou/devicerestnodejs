@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `user_profile` (
 
 CREATE TABLE IF NOT EXISTS `device` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `boxid` int,
   `brand` varchar(255),
   `model` varchar(255),
   `os` varchar(255),
@@ -109,10 +110,10 @@ INSERT INTO `user_profile` (`id`, `profile`) VALUES
 ('3', 'business'),
 ('4', 'tester');
 
-INSERT INTO `device` (`id`, `brand`, `model`, `os`, `osversion`, `screensize`, `companyid`, `badgeid`, `imei`, `serialnumber`, `profileid`, `type`) VALUES
-('1', 'Apple', 'Iphone 6', 'IOS', '10.1.1', '4 inch', '405061', '1031', '102030405061', 'D9101011', '1', 'smartphone'),
-('2', 'Samsung', 'Galaxy 3', 'Android', '9.1.2', '5 inch', '405062', '1032', '102030405062', 'D9101012', '2', 'smartphone'),
-('3', 'Microsoft', 'Surface', 'Windows phone', '8.4.1', '2 inch', '405063', '1033', '102030405063', 'D9101013', '3', 'tablet');
+INSERT INTO `device` (`id`, `boxid`, `brand`, `model`, `os`, `osversion`, `screensize`, `companyid`, `badgeid`, `imei`, `serialnumber`, `profileid`, `type`) VALUES
+('1', '121','Apple', 'Iphone 6', 'IOS', '10.1.1', '4 inch', '405061', '1031', '102030405061', 'D9101011', '1', 'smartphone'),
+('2', '122','Samsung', 'Galaxy 3', 'Android', '9.1.2', '5 inch', '405062', '1032', '102030405062', 'D9101012', '2', 'smartphone'),
+('3', '123','Microsoft', 'Surface', 'Windows phone', '8.4.1', '2 inch', '405063', '1033', '102030405063', 'D9101013', '3', 'tablet');
 
 INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `startdate`, `enddate`) VALUES
 ('1', 'benoit01', 'Benoit', 'Craigh', '1', '2016-01-01 08:32:22', null),
