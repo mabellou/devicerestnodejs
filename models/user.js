@@ -1,5 +1,7 @@
 
 var connection = require('../connection');
+var Profile = require('../models/profile');
+var jwt = require('jsonwebtoken');
 
 function User(attributes) {
   var self = this;
@@ -10,13 +12,25 @@ function User(attributes) {
 
 User.findAll = function(callback) {
     connection.acquire(function(err, con) {
-    con.query('select * from user, user_profile, (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge where user.id = user_last_badge.userid and user_profile.id = user.profileid', function(err, rows) {
+    con.query('select * from user left join (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge on user.id = user_last_badge.userid;', function(err, rows) {
       if (err) { return callback(err, rows); }
       var users = rows.map(function (row) {
         return new User(row);
       });
       callback(null, users);
       con.release();
+    });
+  });  
+};
+
+User.create = function(user, callback) {
+  connection.acquire(function(err, con) {
+    console.log("user --> " , user);
+    console.log("user --> " , Profile.findIdByProfile(user.profile));
+    con.query('INSERT INTO user (username, firstname, lastname, profileid, startdate, enddate, password) VALUES (?, ?, ?, ?, NOW(), null, ?)', [user.username, user.firstname, user.lastname, Profile.findIdByProfile(user.profile), user.password], function(err) {
+      if (err) { return callback(err); }
+      con.release();
+      callback();
     });
   });  
 };
@@ -34,4 +48,38 @@ User.findByBadge = function(badgeId, callback) {
   });  
 };
 
+User.findByUsername = function(userName, callback) {
+  connection.acquire(function(err, con) {
+    con.query('select * from user where username = ? limit 1', [userName], function(err, rows) {
+      if (err) { return callback(err); }
+      con.release();
+      var newUser = null;
+      if (rows[0])
+        newUser = new User(rows[0]);
+      callback(null, newUser);
+    });
+  });  
+};
+
+User.verifyPassword = function(password, user, callback) {
+  if (password != user.password) {
+    callback(null, null);
+  }  
+  callback(null, user);
+};
+
+User.createJwtToken = function(user, callback) {
+  var payload = {
+    id: user.id,
+    username: user.username,
+    profile: Profile.findProfileById(user.profileid)
+  };
+  var token = jwt.sign(payload, 'thisistoomuchsecure', {
+    expiresIn : 60*60*12 // expires in 24 hours
+  }, callback);
+
+};
+
 module.exports = User;
+
+

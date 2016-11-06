@@ -1,4 +1,5 @@
 var moment = require('moment');
+var Profile = require('../../models/profile');
 
 function render(user){
 	return {
@@ -7,7 +8,7 @@ function render(user){
 		fullname: user.firstname + ' ' + user.lastname,
 		firstname: user.firstname,
 		lastname: user.lastname,
-		profile: user.profile,
+		profile: Profile.findProfileById(user.profileid),
 		startdate: moment(user.startdate).format("DD/MM/YYYY HH:mm:ss"),
 		enddate: user.enddate ? moment(user.enddate).format("DD/MM/YYYY HH:mm:ss") : null,
 		counterlocked: 0,

@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `profileid` int,
   `startdate` datetime,
   `enddate` datetime,
+  `password` varchar(1023),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`profileid`) REFERENCES user_profile(`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
@@ -115,10 +116,10 @@ INSERT INTO `device` (`id`, `boxid`, `brand`, `model`, `os`, `osversion`, `scree
 ('2', '122','Samsung', 'Galaxy 3', 'Android', '9.1.2', '5 inch', '405062', '1032', '102030405062', 'D9101012', '2', 'smartphone'),
 ('3', '123','Microsoft', 'Surface', 'Windows phone', '8.4.1', '2 inch', '405063', '1033', '102030405063', 'D9101013', '3', 'tablet');
 
-INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `startdate`, `enddate`) VALUES
-('1', 'benoit01', 'Benoit', 'Craigh', '1', '2016-01-01 08:32:22', null),
-('2', 'caroline01', 'Caroline', 'Lopse', '3', '2016-01-01 08:32:22', null),
-('3', 'vincent01', 'Vincent', 'Ipsum', '2', '2016-01-01 08:32:22', null);
+INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `startdate`, `enddate`, `password`) VALUES
+('1', 'benoit01', 'Benoit', 'Craigh', '1', '2016-01-01 08:32:22', null, 'azerty'),
+('2', 'caroline01', 'Caroline', 'Lopse', '3', '2016-01-01 08:32:22', null, 'azerty'),
+('3', 'vincent01', 'Vincent', 'Ipsum', '2', '2016-01-01 08:32:22', null, 'azerty');
 
 INSERT INTO `user_badge` (`userid`, `badgeid`, `startdate`) VALUES
 ('1', 'U9101011', '2016-01-01 08:32:22'),
