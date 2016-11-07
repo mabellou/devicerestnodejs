@@ -6,7 +6,7 @@ var DeviceStatusController = function () {
 DeviceStatusController.create = function(req, res) {
 	var self = this;
 
-	DeviceStatus.create(function(err) {
+	DeviceStatus.create(req.body, function(err) {
 		if (err) { return res.status(500).send({ error : err } ) }
 		res.send();
 	});
