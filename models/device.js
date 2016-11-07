@@ -6,10 +6,16 @@ function Device(attributes) {
   Object.keys(attributes).forEach(function(key){
       self[key] = attributes[key];
   });
-  if( !this.status || 
+
+  if( (!this.status) || 
       (this.status == "inuse" && this.enddate) || 
-      (this.status == "locked" && moment(this.startdate).isBefore(moment().subtract(15, 'seconds'))))
+      (this.status == "locked" && moment(this.statusdate).isBefore(moment().subtract('1', 'hours').subtract(15, 'seconds')))){
     this.status = "available";
+    this.userid = null;
+    this.firstname = null;
+    this.lastname = null;
+  }
+
 
   this.assignTo = function(userId, callback) {
     var self = this;
