@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var indexView = require('../views/users/index.view');
+var userView = require("../views/users/user.view");
 var jwt = require('jsonwebtoken');
 
 var UsersController = function () {
@@ -12,6 +13,15 @@ UsersController.index = function(req, res) {
 		if (err) { return res.status(500).send({ error : err } ) }
 		// do something with async in order to get the counter
 		res.send(indexView.render(users));
+	});
+};
+
+UsersController.show = function(req, res) {
+	var self = this;
+
+	User.findById(req.params.id, function(err, user) {
+		if (err) { return res.status(500).send({ error : err } ) }
+		res.send(userView.lightRender(user));
 	});
 };
 

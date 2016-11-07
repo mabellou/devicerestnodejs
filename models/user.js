@@ -40,10 +40,10 @@ User.findByBadge = function(badgeId, callback) {
     con.query('select * from user, user_badge where user.id = user_badge.userid and user_badge.badgeid = ? and (user.enddate is null or user.enddate > NOW()) ORDER by user_badge.startdate desc limit 1', [badgeId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      var newUser = null;
+      var showedUser = null;
       if (rows[0])
-        newUser = new User(rows[0]);
-      callback(null, newUser);
+        showedUser = new User(rows[0]);
+      callback(null, showedUser);
     });
   });  
 };
@@ -53,10 +53,23 @@ User.findByUsername = function(userName, callback) {
     con.query('select * from user where username = ? limit 1', [userName], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      var newUser = null;
+      var showedUser = null;
       if (rows[0])
-        newUser = new User(rows[0]);
-      callback(null, newUser);
+        showedUser = new User(rows[0]);
+      callback(null, showedUser);
+    });
+  });  
+};
+
+User.findById = function(userId, callback) {
+  connection.acquire(function(err, con) {
+    con.query('select * from user where id = ? limit 1', [userId], function(err, rows) {
+      if (err) { return callback(err); }
+      con.release();
+      var showedUser = null;
+      if (rows[0])
+        showedUser = new User(rows[0]);
+      callback(null, showedUser);
     });
   });  
 };

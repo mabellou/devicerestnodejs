@@ -1,7 +1,7 @@
 var moment = require('moment');
 var Profile = require('../../models/profile');
 
-function render(user){
+function fullRender(user){
 	return {
 		id: user.id,
 		badgeid: user.badgeid,
@@ -16,4 +16,15 @@ function render(user){
 	};
 }; 
 
-module.exports = {render: render};
+function lightRender(user){
+	return {
+		id: user.id,
+		fullname: user.firstname + ' ' + user.lastname,
+		profile: Profile.findProfileById(user.profileid)
+	};
+}; 
+
+module.exports = {
+	fullRender: fullRender,
+	lightRender: lightRender
+};

@@ -2,7 +2,7 @@ var userView = require("./user.view");
 
 function render(users) {
 	return users.map(function(user) {
-		return userView.render(user);
+		return userView.fullRender(user);
 	});
 }; 
 

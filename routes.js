@@ -11,6 +11,7 @@ module.exports = {
 
     app.get('/api/v1/users', UsersController.index);
     app.post('/api/v1/user', UsersController.create);
+    app.get('/api/v1/user/:id', UsersController.show);
 
     app.get('/api/v1/devices', DevicesController.index);
     app.post('/api/v1/device/status', DeviceStatusController.create);
@@ -29,6 +30,7 @@ module.exports = {
 
     apiRoutes.get('/api/v1/users', UsersController.index);
     apiRoutes.post('/api/v1/user', UsersController.create);
+    apiRoutes.get('/api/v1/user/:id', UsersController.show);
 
     apiRoutes.get('/api/v1/devices', DevicesController.index);
     apiRoutes.post('/api/v1/device/status', DeviceStatusController.create);
