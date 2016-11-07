@@ -41,7 +41,7 @@ UsersController.authenticate = function(req, res) {
 			
 			User.createJwtToken(user, function(err, token) {
 				if (err) { return res.status(500).send({ error : err } ) }
-				res.send({token: token});
+				res.send({token: token, userid: user.id});
 			});
 		});
 	});

@@ -8,7 +8,7 @@ function Device(attributes) {
   });
   if( !this.status || 
       (this.status == "inuse" && this.enddate) || 
-      (this.status == "locked" && moment(this.startdate).isBefore(moment().substract(15, 'minutes'))))
+      (this.status == "locked" && moment(this.startdate).isBefore(moment().subtract(15, 'seconds'))))
     this.status = "available";
 
   this.assignTo = function(userId, callback) {
