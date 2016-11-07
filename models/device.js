@@ -9,7 +9,7 @@ function Device(attributes) {
 
   if( (!this.status) || 
       (this.status == "inuse" && this.enddate) || 
-      (this.status == "locked" && moment(this.statusdate).isBefore(moment().subtract('1', 'hours').subtract(15, 'seconds')))){
+      (this.status == "locked" && moment(this.statusdate).isBefore(moment().subtract(15, 'seconds')))){
     this.status = "available";
     this.userid = null;
     this.firstname = null;
