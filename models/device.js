@@ -1,4 +1,3 @@
-
 var connection = require('../connection');
 var moment = require('moment');
 

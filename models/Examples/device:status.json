@@ -1,5 +1,7 @@
 REQUEST:
 
+POST
+
 {
     "id": 1,
     "statusobject": {

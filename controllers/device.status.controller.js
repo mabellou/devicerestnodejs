@@ -1,14 +1,14 @@
-var Device = require('../models/device');
+var DeviceStatus = require('../models/device.status');
 
 var DeviceStatusController = function () {
 } 
 
-DeviceStatusController.index = function(req, res) {
+DeviceStatusController.create = function(req, res) {
 	var self = this;
 
-	Device.findAll(function(err, devices) {
+	DeviceStatus.create(function(err) {
 		if (err) { return res.status(500).send({ error : err } ) }
-		res.send(indexView.render(devices));
+		res.send();
 	});
 };
 
