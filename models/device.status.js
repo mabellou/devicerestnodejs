@@ -20,14 +20,14 @@ DeviceStatus.create = function(deviceStatus, callback) {
     if(deviceStatus.statusobject.status == "locked") {
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,?,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.userobject.userid, deviceStatus.statusobject.status], createCallback);
     }
-    else if(deviceStatus.status == "inuse") {
+    else if(deviceStatus.statusobject.status == "inuse") {
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,?,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.userobject.userid, deviceStatus.statusobject.status], createCallback);
     }
-    else if(deviceStatus.status == "available") {
+    else if(deviceStatus.statusobject.status == "available") {
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.status], createCallback);
     }
-    else if(deviceStatus.status == "unavailable") {
-      con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.userobject.userid, deviceStatus.statusobject.status], createCallback);
+    else if(deviceStatus.statusobject.status == "unavailable") {
+      con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.status], createCallback);
     }
     else {
       callback("The status is not a valid status");
