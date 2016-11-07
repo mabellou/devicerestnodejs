@@ -1,0 +1,18 @@
+REQUEST:
+
+{
+    "id": 1,
+    "statusobject": {
+      "status": "locked",
+      "userobject": {
+        "userid": 1
+      }
+    }
+}
+
+
+RESPONSE: 
+
+200 OK
+
+
