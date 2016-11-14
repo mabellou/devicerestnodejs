@@ -13,11 +13,15 @@ ScansController.create = function(req, res) {
   user.findByBadge(req.body.badgeId, function(err, user) {
       if (err) { return res.status(500).send({ error : err } ) }
       if (!user) {
+        console.log("User not found");
         Device.findByBadge(req.body.badgeId, function(err, device) {
             if (err) { return res.status(500).send({ error : err } ) }
-            if (!device)
+            if (!device) {
+              console.log("Device not found");
               return res.status(404).send({ error : "BadgeId not found" } )
+            }
             else {
+              console.log("Device found");
               scan.create("device", device, function(err) {
               	if (err) { return res.status(500).send({ error : err } ) }
 
@@ -32,6 +36,7 @@ ScansController.create = function(req, res) {
       else {
         scan.create("user", user, function(err, user) {
           if (err) { return res.status(500).send({ error : err} ) }
+          console.log("User found");
           res.end();
         });  
       }
