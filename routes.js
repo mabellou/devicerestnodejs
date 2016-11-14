@@ -36,6 +36,7 @@ module.exports = {
     apiRoutes.post('/api/v1/device/status', DeviceStatusController.create);
 
     app.use('/private', apiRoutes);
+    
 
   }
 };

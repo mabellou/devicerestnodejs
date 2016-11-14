@@ -31,7 +31,7 @@ function Device(attributes) {
   this.release = function(callback) {
     var self = this;
     connection.acquire(function(err, con) {
-      con.query('update device_status_user set enddate=NOW() where deviceid=? and startdate=?', [self.id, self.startdate], function(err, rows) {
+      con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [self.id, deviceStatus.statusobject.status], function(err, rows) {
         if (err) { return callback(err); }
         con.release();
         callback(null);
