@@ -7,27 +7,42 @@ var ScansController = function () {
 
 ScansController.create = function(req, res) {
 	var self = this;
-  if (!req.body.badgeId) 
+  if (!req.body.badgeId) {
+    ScansController._displayerror("400", { error : "Bad Request: Missing badgeId"  });
     return res.status(400).send({ error : "Bad Request: Missing badgeId" } )
+  }
   console.log("badgeid --> ", req.body.badgeId);
   user.findByBadge(req.body.badgeId, function(err, user) {
-      if (err) { return res.status(500).send({ error : err } ) }
+      if (err) { 
+          ScansController._displayerror("500", { error : err });
+        return res.status(500).send({ error : err } ) 
+      }
       if (!user) {
         console.log("User not found");
         Device.findByBadge(req.body.badgeId, function(err, device) {
-            if (err) { return res.status(500).send({ error : err } ) }
+            if (err) { 
+              ScansController._displayerror("500", { error : err });
+              return res.status(500).send({ error : err } ) 
+            }
             if (!device) {
-              console.log("Device not found");
+              ScansController._displayerror("404", { error : "BadgeId not found" });
               return res.status(404).send({ error : "BadgeId not found" } )
             }
             else {
               console.log("Device found");
               scan.create("device", device, function(err) {
-              	if (err) { return res.status(500).send({ error : err } ) }
+              	if (err) { 
+                  ScansController._displayerror("500", { error : err });
+                  return res.status(500).send({ error : err } ) 
+                }
 
               	ScansController._handleDeviceScan(device, function(err) {
-                	if (err) { return res.status(500).send({ error : err } ) }
-                	res.end();
+                	if (err) { 
+                    ScansController._displayerror("500", { error : err });
+                    return res.status(500).send({ error : err } ) 
+                  }
+                	ScansController._displayerror("200","");
+                  res.end();
               	});  
               });
             }
@@ -35,8 +50,11 @@ ScansController.create = function(req, res) {
       } 
       else {
         scan.create("user", user, function(err, user) {
-          if (err) { return res.status(500).send({ error : err} ) }
-          console.log("User found");
+          if (err) { 
+            ScansController._displayerror("500", { error : err });
+            return res.status(500).send({ error : err} ) 
+          }
+          ScansController._displayerror("200","");
           res.end();
         });  
       }
@@ -67,6 +85,12 @@ ScansController._handleDeviceScan = function (device, callback) {
   		return callback("unknown error")
   	}
 	});
+};
+
+ScansController._displayerror = function(status, message){
+  console.log('==> Sent ==> ', status);
+  console.log('==> Sent ==> ', message);
+  console.log('==============');
 };
 
 
