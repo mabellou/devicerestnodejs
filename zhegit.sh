@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# git init
+# heroku create appname
+
 echo "Start git script"
 
 git add .

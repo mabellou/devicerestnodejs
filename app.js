@@ -11,6 +11,11 @@ app.use(bodyparser.json());
 
 app.use(morgan('dev'));
 
+app.use(function(req, res, next) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	return next();
+});
+
  
 connection.init();
 routes.configure(app);
