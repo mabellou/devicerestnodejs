@@ -43,7 +43,7 @@ function Device(attributes) {
 
 Device.findByBadge = function(badgeId, callback) {
   connection.acquire(function(err, con) {
-    con.query('select * from device left join device_status_user on device.id = device_status_user.deviceid where device.badgeid = ? order by startdate desc limit 1', [badgeId], function(err, rows) {
+    con.query('select * from device left join (select deviceid, userid, status, last_status.startdate as statusdate, firstname, lastname from (Select dsu.deviceid, dsu.userid, dsu.status, dsu2.startdate From device_status_user dsu Inner Join (Select deviceid,max(startdate) as startdate From device_status_user Group By deviceid) dsu2 On dsu.deviceid = dsu2.deviceid And dsu.startdate = dsu2.startdate) last_status left join user on user.id = last_status.userid)  last_device_user on device.id = last_device_user.deviceid where device.id=?', [badgeId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
       var newDevice = null;
