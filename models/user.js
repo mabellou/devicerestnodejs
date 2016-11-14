@@ -37,7 +37,7 @@ User.create = function(user, callback) {
 
 User.findByBadge = function(badgeId, callback) {
   connection.acquire(function(err, con) {
-    con.query('select * from user left join (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge on user.id = user_last_badge.userid where user.badgeid = ? and (user.enddate is null or user.enddate > NOW())', [badgeId], function(err, rows) {
+    con.query('select * from user left join (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge on user.id = user_last_badge.userid where user_last_badge.badgeid = ? and (user.enddate is null or user.enddate > NOW())', [badgeId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
       var showedUser = null;
