@@ -8,7 +8,7 @@ function DeviceStatus() {
 DeviceStatus.create = function(deviceStatus, callback) {
   connection.acquire(function(err, con) {
     
-    console.log("devicestatus --> " , deviceStatus);
+    //console.log("devicestatus --> " , deviceStatus);
     console.log("status --> " , deviceStatus.statusobject.status);
 
     createCallback = function(err) {

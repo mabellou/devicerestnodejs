@@ -9,7 +9,14 @@ var app = express();
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
+
+app.use(function(req, res, next) {
+	console.log('==> Received Request ==> ', req.method, req.url);
+	console.log('==> Received Body ==> ', req.body);
+	console.log('==============');
+	return next();
+});
 
 app.use(function(req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", "*");
