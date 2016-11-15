@@ -1,6 +1,7 @@
 var user = require('../models/user');
 var Device = require('../models/device');
 var scan = require('../models/scan');
+var request = require("request");
 
 var ScansController = function () {
 } 
@@ -43,19 +44,21 @@ ScansController.create = function(req, res) {
                   }
                 	ScansController._displayerror("200","");
                   res.end();
+                  ScansController._sendEvent("A <b>device</b> has been scanned (" + device.badgeid + ").");
               	});  
               });
             }
         });
       } 
       else {
-        scan.create("user", user, function(err, user) {
+        scan.create("user", user, function(err) {
           if (err) { 
             ScansController._displayerror("500", { error : err });
             return res.status(500).send({ error : err} ) 
           }
           ScansController._displayerror("200","");
           res.end();
+          ScansController._sendEvent("A <b>user</b> has been scanned (" + user.badgeid + ").");
         });  
       }
   });
@@ -91,7 +94,25 @@ ScansController._displayerror = function(status, message){
   console.log('==> Sent ==> ', status);
   console.log('==> Sent ==> ', message);
   console.log('==============');
+  if (status != "200")
+    ScansController._sendEvent("<b>Error</b> : " + message.error);
 };
 
+ScansController._sendEvent = function(message){
+  request({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    uri: "https://websocketdevice.herokuapp.com/scanevent",
+    method: "POST",
+    form: {
+      message: message
+    }
+  }, function(error, response, body) {
+    if (error)
+      console.log('==> SCAN received error ==> ', error);
+  });
+
+};
 
 module.exports = ScansController;
