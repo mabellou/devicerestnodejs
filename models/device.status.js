@@ -21,6 +21,7 @@ DeviceStatus.create = function(deviceStatus, callback) {
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,?,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.userobject.userid, deviceStatus.statusobject.status], createCallback);
     }
     else if(deviceStatus.statusobject.status == "inuse") {
+      console.log("DeviceStatus ---> ", deviceStatus);
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,?,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.userobject.userid, deviceStatus.statusobject.status], createCallback);
     }
     else if(deviceStatus.statusobject.status == "available") {
