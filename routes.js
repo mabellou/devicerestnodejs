@@ -3,6 +3,7 @@ var UsersController = require('./controllers/users.controller');
 var DevicesController = require('./controllers/devices.controller');
 var DeviceStatusController = require('./controllers/device.status.controller');
 var express 	= require('express');
+
  
 module.exports = {
   configure: function(app) {

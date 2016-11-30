@@ -11,14 +11,14 @@ function User(attributes) {
 };
 
 User.findAll = function(callback) {
-    connection.acquire(function(err, con) {
+  connection.acquire(function(err, con) {
     con.query('select * from user left join (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge on user.id = user_last_badge.userid where (user.enddate is null or user.enddate > NOW())', function(err, rows) {
-      if (err) { return callback(err, rows); }
-      var users = rows.map(function (row) {
-        return new User(row);
-      });
-      callback(null, users);
-      con.release();
+        if (err) { return callback(err, rows); }
+        var users = rows.map(function (row) {
+          return new User(row);
+        });
+        callback(null, users);
+        con.release();
     });
   });  
 };

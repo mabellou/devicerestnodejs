@@ -1,6 +1,8 @@
 var User = require('../models/user');
+var Device = require('../models/device');
 var indexView = require('../views/users/index.view');
 var userView = require("../views/users/user.view");
+var async = require('async');
 var jwt = require('jsonwebtoken');
 
 var UsersController = function () {
@@ -10,9 +12,37 @@ UsersController.index = function(req, res) {
 	var self = this;
 
 	User.findAll(function(err, users) {
-		if (err) { return res.status(500).send({ error : err } ) }
-		// do something with async in order to get the counter
-		res.send(indexView.render(users));
+		callback = function (err) {if (err) { return res.status(500).send({ error : err } ) }};
+		if (err) return callback(err);
+
+		Device.findAllUsedOrLocked(function(err, devices) {
+			if (err) return callback(err);
+						
+			async.forEachLimit(users, 1, function(user, callback) { 
+
+				async.series([
+		        function(callback) {
+		            Device.findByUserByStatus(user.id, devices, 'locked', function(err, count) {
+		                if (err) return callback(err);
+		                user.counterlocked = count;
+		                callback();
+		            });
+		        },
+
+		        function(callback) {
+		            Device.findByUserByStatus(user.id, devices, 'inuse', function(err, count) {
+		                if (err) return callback(err);
+		                user.counterinuse = count;
+		                callback();
+		            });
+		        }],
+		        callback	
+			  	);  
+	    	}, function(err) { 
+			    if (err) return callback(err);
+			    res.send(indexView.render(users));
+    		}); 
+		});
 	});
 };
 
@@ -83,3 +113,4 @@ UsersController.verifyAuthenticate = function(req, res, next) {
 }
 
 module.exports = UsersController;
+
