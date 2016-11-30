@@ -13,6 +13,8 @@ Profile.findProfileById = function(profileid) {
     return "business"
   if (profileid == 4)
     return "tester"
+  if (profileid == 5)
+    return "savi"
 };
 
 Profile.findIdByProfile = function(profile) {
@@ -25,6 +27,8 @@ Profile.findIdByProfile = function(profile) {
     return 3
   if (profile == "tester")
     return 4
+  if (profile == "savi")
+    return 5
 };
 
 module.exports = Profile;

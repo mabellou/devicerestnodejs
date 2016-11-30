@@ -109,7 +109,8 @@ INSERT INTO `user_profile` (`id`, `profile`) VALUES
 ('1', 'administrator'),
 ('2', 'incubator'),
 ('3', 'business'),
-('4', 'tester');
+('4', 'tester'),
+('5', 'savi');;
 
 INSERT INTO `device` (`id`, `boxid`, `brand`, `model`, `os`, `osversion`, `screensize`, `companyid`, `badgeid`, `imei`, `serialnumber`, `profileid`, `type`) VALUES
 ('1', '121','Apple', 'Iphone 6', 'IOS', '10.1.1', '4 inch', '405061', '1031', '102030405061', 'D9101011', '1', 'smartphone'),

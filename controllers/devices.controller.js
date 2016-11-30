@@ -9,7 +9,7 @@ DevicesController.index = function(req, res) {
 
 	Device.findAll(function(err, devices) {
 		if (err) { return res.status(500).send({ error : err } ) }
-		res.send(indexView.render(devices));
+		res.send(indexView.render(devices, req.decoded ? req.decoded.profile : req.decoded));
 	});
 };
 
