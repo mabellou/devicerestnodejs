@@ -11,13 +11,17 @@ var UsersController = function () {
 UsersController.index = function(req, res) {
 	var self = this;
 
+	if (!UsersController.isAdmin(req.decoded, res))
+		return res.status(500).send({ error: 'You are not authorized to call this URL' });
+
+
 	User.findAll(function(err, users) {
 		callback = function (err) {if (err) { return res.status(500).send({ error : err } ) }};
 		if (err) return callback(err);
 
 		Device.findAllUsedOrLocked(function(err, devices) {
 			if (err) return callback(err);
-						
+
 			async.forEachLimit(users, 1, function(user, callback) { 
 
 				async.series([
@@ -58,6 +62,9 @@ UsersController.show = function(req, res) {
 UsersController.create = function(req, res) {
 	var self = this;
 
+	if (!UsersController.isAdmin(req.decoded, res))
+		return res.status(500).send({ error: 'You are not authorized to call this URL' });
+
 	User.create(req.body, function(err) {
 		if (err) { return res.status(500).send({ error : err } ) }
 		res.end();
@@ -89,7 +96,7 @@ UsersController.authenticate = function(req, res) {
 
 
 UsersController.verifyAuthenticate = function(req, res, next) {
-	var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+	var token = req.body.token || req.query['token'] || req.headers['x-access-token'];
 
 	if (token) {
 
@@ -110,6 +117,14 @@ UsersController.verifyAuthenticate = function(req, res, next) {
 			message: 'No token provided.'
 		});
 	}
+}
+
+UsersController.isAdmin = function(token, res) {
+	if(token) {
+		if(token.profile != 'administrator')
+			return false
+	}
+	return true;
 }
 
 module.exports = UsersController;

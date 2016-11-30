@@ -50,7 +50,7 @@ User.findByBadge = function(badgeId, callback) {
 
 User.findByUsername = function(userName, callback) {
   connection.acquire(function(err, con) {
-    con.query('select * from user where username = ? limit 1', [userName], function(err, rows) {
+    con.query('select * from user where username = ? and (user.enddate is null or user.enddate > NOW()) limit 1', [userName], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
       var showedUser = null;
@@ -63,7 +63,7 @@ User.findByUsername = function(userName, callback) {
 
 User.findById = function(userId, callback) {
   connection.acquire(function(err, con) {
-    con.query('select * from user where id = ? limit 1', [userId], function(err, rows) {
+    con.query('select * from user where id = ? and (user.enddate is null or user.enddate > NOW()) limit 1', [userId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
       var showedUser = null;
