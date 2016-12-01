@@ -4,7 +4,7 @@ var CommonController = function () {
 } 
 
 CommonController._displayResponse = function(status, message, show){  
-  var manualShowLog = true;
+  var manualShowLog = false;
   console.log('---');
   if(show)
   	console.log('==> Response ==> ', status, message);
