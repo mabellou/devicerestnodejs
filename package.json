@@ -13,6 +13,7 @@
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+    "frisby": "^0.8.5",
     "jsonwebtoken": "^7.1.9",
     "moment": "2.15.2",
     "morgan": "^1.7.0",

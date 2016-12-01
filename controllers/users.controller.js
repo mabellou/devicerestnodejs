@@ -4,6 +4,7 @@ var indexView = require('../views/users/index.view');
 var userView = require("../views/users/user.view");
 var async = require('async');
 var jwt = require('jsonwebtoken');
+var CommonController = require('./common.controller.js');
 
 var UsersController = function () {
 } 
@@ -12,11 +13,11 @@ UsersController.index = function(req, res) {
 	var self = this;
 
 	if (!UsersController.isAdmin(req.decoded, res))
-		return res.status(500).send({ error: 'You are not authorized to call this URL' });
+		return  CommonController._sendError(res, { internErrorCode: 2, text: 'You are not authorized to call this URL'});
 
 
 	User.findAll(function(err, users) {
-		callback = function (err) {if (err) { return res.status(500).send({ error : err } ) }};
+		callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
 		if (err) return callback(err);
 
 		Device.findAllUsedOrLocked(function(err, devices) {
@@ -25,27 +26,27 @@ UsersController.index = function(req, res) {
 			async.forEachLimit(users, 1, function(user, callback) { 
 
 				async.series([
-		        function(callback) {
-		            Device.findByUserByStatus(user.id, devices, 'locked', function(err, count) {
-		                if (err) return callback(err);
-		                user.counterlocked = count;
-		                callback();
-		            });
-		        },
+					function(callback) {
+						Device.findByUserByStatus(user.id, devices, 'locked', function(err, count) {
+							if (err) return callback(err);
+							user.counterlocked = count;
+							callback();
+						});
+					},
 
-		        function(callback) {
-		            Device.findByUserByStatus(user.id, devices, 'inuse', function(err, count) {
-		                if (err) return callback(err);
-		                user.counterinuse = count;
-		                callback();
-		            });
-		        }],
-		        callback	
-			  	);  
-	    	}, function(err) { 
-			    if (err) return callback(err);
-			    res.send(indexView.render(users));
-    		}); 
+					function(callback) {
+						Device.findByUserByStatus(user.id, devices, 'inuse', function(err, count) {
+							if (err) return callback(err);
+							user.counterinuse = count;
+							callback();
+						});
+					}],
+					callback	
+					);  
+			}, function(err) { 
+				if (err) return callback(err);
+				CommonController._sendResponse(res, indexView.render(users), false);
+			}); 
 		});
 	});
 };
@@ -53,9 +54,13 @@ UsersController.index = function(req, res) {
 UsersController.show = function(req, res) {
 	var self = this;
 
+	// The user can only see his id if not admin
+	if (!UsersController.isAdmin(req.decoded, res) && (req.decoded.id != req.params.id) )
+		return  CommonController._sendError(res, { internErrorCode: 10, text: 'You are not authorized to see another user than yourself'});
+
 	User.findById(req.params.id, function(err, user) {
-		if (err) { return res.status(500).send({ error : err } ) }
-		res.send(userView.lightRender(user));
+		if (err) { return CommonController._sendError(res, err); }
+		CommonController._sendResponse(res, userView.lightRender(user), false);
 	});
 };
 
@@ -63,11 +68,11 @@ UsersController.create = function(req, res) {
 	var self = this;
 
 	if (!UsersController.isAdmin(req.decoded, res))
-		return res.status(500).send({ error: 'You are not authorized to call this URL' });
+		return CommonController._sendError(res, { internErrorCode: 2, text: 'You are not authorized to call this URL'});
 
 	User.create(req.body, function(err) {
-		if (err) { return res.status(500).send({ error : err } ) }
-		res.end();
+		if (err) { return CommonController._sendError(res, err); }
+		CommonController._sendResponse(res, null, false);
 	});
 };
 
@@ -75,25 +80,28 @@ UsersController.authenticate = function(req, res) {
 	var self = this;
 
 	User.findByUsername(req.body.username, function(err, user) {
-		if (err) { return res.status(500).send({ error : err } ) }
+		if (err) { return CommonController._sendError(res, err); }
 		if (!user) {
-      		return res.status(500).send({ error : "Authentication failed: user not found" } )
-    	}
+			return CommonController._sendError(res, { internErrorCode: 3, text: 'Authentication failed: user not found'});
+		}
 		
 		User.verifyPassword(req.body.password, user, function(err, user) {
-			if (err) { return res.status(500).send({ error : err } ) }
+			if (err) { return CommonController._sendError(res, err); }
 			if (!user) {
-      			return res.status(500).send({ error : "Authentication failed: wrong password" } )
-    		}
+				return CommonController._sendError(res, { internErrorCode: 4, text: 'Authentication failed: wrong password'});
+			}
 			
 			User.createJwtToken(user, function(err, token) {
-				if (err) { return res.status(500).send({ error : err } ) }
-				res.send({token: token, userid: user.id});
+				if (err) { return CommonController._sendError(res, err); }
+				CommonController._sendResponse(res, {token: token, userid: user.id}, false);
 			});
 		});
 	});
 };
 
+UsersController.check = function(req, res) {
+	CommonController._sendResponse(res, req.decoded, false);
+}
 
 UsersController.verifyAuthenticate = function(req, res, next) {
 	var token = req.body.token || req.query['token'] || req.headers['x-access-token'];
@@ -103,7 +111,7 @@ UsersController.verifyAuthenticate = function(req, res, next) {
 		// verifies secret and checks exp
 		jwt.verify(token, 'thisistoomuchsecure', function(err, decoded) {			
 			if (err) {
-				return res.status(403).send({ error: 'Failed to authenticate token.' });		
+				return CommonController._sendError(res, { internErrorCode: 5, text: 'Failed to authenticate token'});	
 			} else {
 				// if everything is good, save to request for use in other routes
 				req.decoded = decoded;	
@@ -112,10 +120,7 @@ UsersController.verifyAuthenticate = function(req, res, next) {
 		});
 
 	} else {
-		return res.status(403).send({ 
-			success: false, 
-			message: 'No token provided.'
-		});
+		return CommonController._sendError(res, { internErrorCode: 6, text: 'No token provided'});	
 	}
 }
 

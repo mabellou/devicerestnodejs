@@ -13,22 +13,24 @@ function User(attributes) {
 User.findAll = function(callback) {
   connection.acquire(function(err, con) {
     con.query('select * from user left join (Select ub.userid, ub.badgeid From user_badge ub Inner Join (Select userid,max(startdate) as startdate From user_badge Group By userid) ub2 On ub.userid = ub2.userid And ub.startdate = ub2.startdate) user_last_badge on user.id = user_last_badge.userid where (user.enddate is null or user.enddate > NOW())', function(err, rows) {
-        if (err) { return callback(err, rows); }
-        var users = rows.map(function (row) {
-          return new User(row);
-        });
-        callback(null, users);
-        con.release();
+      if (err) { return callback(err, rows); }
+      var users = rows.map(function (row) {
+        return new User(row);
+      });
+      callback(null, users);
+      con.release();
     });
   });  
 };
 
 User.create = function(user, callback) {
   connection.acquire(function(err, con) {
-    console.log("user --> " , user);
-    console.log("user --> " , Profile.findIdByProfile(user.profile));
     con.query('INSERT INTO user (username, firstname, lastname, profileid, startdate, enddate, password) VALUES (?, ?, ?, ?, NOW(), null, ?)', [user.username, user.firstname, user.lastname, Profile.findIdByProfile(user.profile), user.password], function(err) {
-      if (err) { return callback(err); }
+      if (err) { 
+        if(err.errno == 1062)
+          return callback({ internErrorCode: 11, text: 'The user already exists'}); 
+        return callback(err); 
+      }
       con.release();
       callback();
     });
@@ -66,11 +68,10 @@ User.findById = function(userId, callback) {
     con.query('select * from user where id = ? and (user.enddate is null or user.enddate > NOW()) limit 1', [userId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      var showedUser = null;
       if (rows[0])
-        showedUser = new User(rows[0]);
-      callback(null, showedUser);
-    });
+        return callback(null, new User(rows[0]));
+      callback({ internErrorCode: 9, text: 'The user does not exist'}, null);
+    }); 
   });  
 };
 

@@ -12,23 +12,15 @@ app.use(bodyparser.json());
 //app.use(morgan('dev'));
 
 app.use(function(req, res, next) {
-	console.log('==> Received Request ==> ', req.method, req.url);
-	console.log('==> Received Body ==> ', req.body);
-	console.log('==============');
-	return next();
+  console.log();
+  console.log('==============');
+  console.log('==> Request URL ==> ', req.method, req.url);
+  console.log('==> Request Body ==> ', req.body);
+  console.log('---');
+  return next();
 });
 
 app.use(cors());
-
-/*app.use(function(req, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", "*");
-	res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-	return next();
-});*/
-
-
  
 connection.init();
 routes.configure(app);

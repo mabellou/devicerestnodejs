@@ -17,6 +17,7 @@ function fullRender(user){
 }; 
 
 function lightRender(user){
+	console.log("user -> ", user);
 	return {
 		id: user.id,
 		fullname: user.firstname + ' ' + user.lastname,

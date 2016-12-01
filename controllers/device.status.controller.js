@@ -1,25 +1,22 @@
 var DeviceStatus = require('../models/device.status');
+var CommonController = require('./common.controller.js');
+var UsersController = require('./users.controller.js');
 
 var DeviceStatusController = function () {
 } 
 
 DeviceStatusController.create = function(req, res) {
 	var self = this;
+	
+	if (!UsersController.isAdmin(req.decoded, res) && (req.decoded.id != req.body.statusobject.userobject.userid) )
+		return  CommonController._sendError(res, { internErrorCode: 12, text: 'You are not authorized to change the assignement of another user than yourself'});
 
 	DeviceStatus.create(req.body, function(err) {
 		if (err) { 
-			DeviceStatusController._displayerror("500", { error : err });
-			return res.status(500).send({ error : err } ) 
+			return  CommonController._sendError(res, err);
 		}
-		DeviceStatusController._displayerror("200","");
-		res.send();
+		CommonController._sendResponse(res, null, false);
 	});
-};
-
-DeviceStatusController._displayerror = function(status, message){
-  console.log('==> Sent ==> ', status);
-  console.log('==> Sent ==> ', message);
-  console.log('==============');
 };
 
 module.exports = DeviceStatusController;
