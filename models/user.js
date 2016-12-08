@@ -2,6 +2,7 @@
 var connection = require('../connection');
 var Profile = require('../models/profile');
 var jwt = require('jsonwebtoken');
+var moment = require('moment');
 
 function User(attributes) {
   var self = this;
@@ -25,10 +26,33 @@ User.findAll = function(callback) {
 
 User.create = function(user, callback) {
   connection.acquire(function(err, con) {
-    con.query('INSERT INTO user (username, firstname, lastname, profileid, startdate, enddate, password) VALUES (?, ?, ?, ?, NOW(), null, ?)', [user.username, user.firstname, user.lastname, Profile.findIdByProfile(user.profile), user.password], function(err) {
+
+    if (user.enddate && moment(user.enddate, "DD/MM/YYYY").isValid())
+      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD");
+    else
+      user.enddate = null;
+
+    con.query('INSERT INTO user (username, firstname, lastname, profileid, startdate, enddate, password) VALUES (?, ?, ?, ?, NOW(), ?, ?)', [user.username, user.firstname, user.lastname, Profile.findIdByProfile(user.profile), user.enddate, user.password], function(err, rows) {
       if (err) { 
         if(err.errno == 1062)
           return callback({ internErrorCode: 11, text: 'The user already exists'}); 
+        return callback(err); 
+      }
+      if(rows && rows.insertId)
+        user.userid = rows.insertId;
+      else
+        callback({ internErrorCode: 1, text: 'No id for the user was received'})
+
+      con.release();
+      callback();
+    });
+  });  
+};
+
+User.createBadge = function(user, callback) {
+  connection.acquire(function(err, con) {
+    con.query('INSERT INTO user_badge (userid, badgeid, startdate) VALUES (?, ?, NOW())', [user.userid, user.badgeid], function(err) {
+      if (err) { 
         return callback(err); 
       }
       con.release();

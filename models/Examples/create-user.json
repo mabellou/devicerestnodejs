@@ -15,17 +15,3 @@ Response:
 {
 	"id": 14
 }
-
-
-Request: 
-
-{
-	"id": 13,
-	"username": "mabellou",
-	"profile": "tester",
-	"enddate": "11/12/2016"
-}
-
-Response:
-
-200 HTTP OK

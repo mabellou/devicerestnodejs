@@ -17,7 +17,7 @@ UsersController.index = function(req, res) {
 
 
 	User.findAll(function(err, users) {
-		callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
+		var callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
 		if (err) return callback(err);
 
 		Device.findAllUsedOrLocked(function(err, devices) {
@@ -67,13 +67,43 @@ UsersController.show = function(req, res) {
 UsersController.create = function(req, res) {
 	var self = this;
 
+	req.checkBody('username', "username is empty or too long or not a string").notEmpty().isLt255().isString();
+	req.checkBody('password', "password is empty or too long or not a string").notEmpty().isLt255().isString();
+	req.checkBody('badgeid', "badgeid is empty or too long or not a string").notEmpty().isLt255().isString();
+	req.checkBody('firstname', "firstname is empty or too long or not a string").notEmpty().isLt255().isString();
+	req.checkBody('lastname', "lastname is empty or too long or not a string").notEmpty().isLt255().isString();
+	req.checkBody('profile', "profile is empty or too long or not a string").notEmpty().isLt255().isString();
+	if(req.body.enddate)
+		req.checkBody('enddate', "enddate is not the right format. It should be DD/MM/YYYY").isDDMMYYYY();
+	
+	var validationErrors = req.validationErrors();
+  if (validationErrors) {
+    return CommonController._sendError(res, { internErrorCode: 15, text: 'Input validation error: ' + validationErrors[0].msg});
+  }
+
 	if (!UsersController.isAdmin(req.decoded, res))
 		return CommonController._sendError(res, { internErrorCode: 2, text: 'You are not authorized to call this URL'});
 
-	User.create(req.body, function(err) {
-		if (err) { return CommonController._sendError(res, err); }
-		CommonController._sendResponse(res, null, false);
+	var user = req.body;
+	var callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
+
+	async.series([
+	    function(callback) {
+        User.create(user, function(err) {
+					callback(err);
+				});
+	    },
+	    function(callback) {
+        User.createBadge(user, function(err) {
+					callback(err);
+				});
+	    }
+	],
+	function(err) { 
+			if (err) return callback(err);
+			CommonController._sendResponse(res, { id: user.userid}, false);
 	});
+
 };
 
 UsersController.authenticate = function(req, res) {

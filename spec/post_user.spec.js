@@ -34,15 +34,20 @@ frisby.create('Authenticate as administrator')
       .post(userURL, { 
         username: 'createUser' + userNumber, 
         password: 'azerty',
+        badgeid: 'EDRF43RF',
         firstname: 'testfirst' + userNumber,
         lastname: 'testlast',
-        profile: 'tester'
+        profile: 'tester',
+        "enddate": '30/12/2021'
         },
         { json: true },
         { headers: { 'Content-Type': 'application/json' }
       })
       .expectStatus(200)
-      .expectHeader('Content-Length','0')
+      .expectHeaderContains('Content-Type', 'application/json')
+      .expectJSONTypes({
+        id: Number
+      })
       .after(function (res) {
 
         frisby.create('Create a user: verify user exists')
@@ -56,6 +61,7 @@ frisby.create('Authenticate as administrator')
           .post(userURL, { 
             username: 'createUser' + userNumber, 
             password: 'azerty',
+            badgeid: 'EDRF43RF',
             firstname: 'testfirst' + userNumber,
             lastname: 'testlast',
             profile: 'tester'
@@ -105,6 +111,7 @@ frisby.create('Authenticate as tester')
       .post(userURL, { 
         username: 'createUser' + userNumber, 
         password: 'azerty',
+        badgeid: 'EDRF43RF',
         firstname: 'testfirst' + userNumber,
         lastname: 'testlast',
         profile: 'tester'
