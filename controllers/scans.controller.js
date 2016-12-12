@@ -30,7 +30,7 @@ ScansController.create = function(req, res) {
 
            ScansController._handleDeviceScan(device, function(err) {
              if (err) { return CommonController._sendEvent(true, res, err); }
-             return CommonController._sendEvent(false, res, null, "A <b>device</b> has been scanned (" + device.badgeid + ").");
+             return CommonController._sendEvent(false, res, {message: { code: 1, text: "Device found"}}, "A <b>device</b> has been scanned (" + device.badgeid + ").");
            });  
          });
         }
@@ -39,7 +39,7 @@ ScansController.create = function(req, res) {
     else {
       scan.create("user", user, function(err) {
         if (err) { return CommonController._sendEvent(true, res, err); }
-        return CommonController._sendEvent(false, res, null, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        return CommonController._sendEvent(false, res, {message: { code: 1, text: "User found"}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
   });

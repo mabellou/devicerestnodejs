@@ -15,4 +15,10 @@ API Error List:
 11: The user already exists (OK)
 12: You are not authorized to change the assignement of another user than yourself (OK)
 13: Device is not assigned (OK)
-14: Input validation error: $input validation error message$
+14: Input validation error: $input validation error message
+
+
+
+API scan message list
+
+message: { code: 8, text: "BadgeId not found"}

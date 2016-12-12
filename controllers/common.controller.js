@@ -53,10 +53,8 @@ CommonController._sendEvent = function(err, res, message, event){
   }
   else {
     CommonController._sendError(res, message);
-    messageToSend = "<b>Error</b> : " + JSON.stringify(message);
+    messageToSend = "<b>Error</b> : " + JSON.stringify(message.text) + " (code:" + JSON.stringify(message.internErrorCode) + ").";
   }
-  console.log("errorrrrr ->", message);
-  console.log("errorrrrr ->", messageToSend);
   request({
     headers: {
       'Content-Type': 'application/json'
