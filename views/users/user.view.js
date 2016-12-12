@@ -5,6 +5,7 @@ function fullRender(user){
 	return {
 		id: user.id,
 		badgeid: user.badgeid,
+		username: user.username,
 		fullname: user.firstname + ' ' + user.lastname,
 		firstname: user.firstname,
 		lastname: user.lastname,
