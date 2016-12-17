@@ -9,7 +9,7 @@ var ScansController = function () {
 ScansController.create = function(req, res) {
 
   if(req.body.key !== "thiskeyisnottoomuchsecure")
-    return CommonController._sendEvent(true, res, { internErrorCode: 17, text: 'The key is not correct'});
+    return CommonController._sendEvent(true, res, { internErrorCode: 17, text: 'The key is not correct.'});
 
 	var self = this;
   if (!req.body.badgeId) {
@@ -21,7 +21,7 @@ ScansController.create = function(req, res) {
       if (err) { 
         console.log("==> Initial Error ==> ", err);
         if(!err.internErrorCode)
-          return CommonController._sendEvent(true, res, { internErrorCode: 1, text: 'Technical error. Please contact the administrator.' });
+          return CommonController._sendEvent(true, res, { internErrorCode: 1, text: 'Technical error. Please contact an administrator.' });
         else
           return CommonController._sendEvent(true, res, err);
       }
@@ -71,10 +71,10 @@ ScansController._handleDeviceScan = function (device, callback) {
       device.assignTo(userId, callback);
     }
     else if (userId && device.status == "unavailable"){
-      return callback({ internErrorCode: 15, text: 'The device is currently not available'})
+      return callback({ internErrorCode: 15, text: 'The device is currently not available.'})
     }
     else if (userId && (device.status == "locked" && device.userid != userId)){
-      return callback({ internErrorCode: 16, text: 'The device is already locked by another user'})
+      return callback({ internErrorCode: 16, text: 'The device is already locked by another user.'})
     }
     else if (!userId && device.status == "inuse"){
       device.release(callback);
