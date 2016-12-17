@@ -35,7 +35,7 @@ ScansController.create = function(req, res) {
       Device.findByBadge(req.body.badgeId, function(err, device) {
         if (err) { callbackError(err) }
         if (!device) {
-          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badgeId. '+ req.body.badgeId + '. is not known by the system'});
+          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badge id. '+ req.body.badgeId + '. is not known by the system'});
         }
         else {
           console.log("Device found");
@@ -47,7 +47,7 @@ ScansController.create = function(req, res) {
             if (released)
               return CommonController._sendEvent(false, res, {message: { code: 2, text: "Enjoy the device."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
 
-            return CommonController._sendEvent(false, res, {message: { code: 3, text: "Thanks and good day."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
+            return CommonController._sendEvent(false, res, {message: { code: 3, text: "Thanks and. good day."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
            });  
          });
         }
@@ -56,7 +56,7 @@ ScansController.create = function(req, res) {
     else {
       scan.create("user", user, function(err) {
         if (err) { callbackError(err) }
-        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello. Please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello. Please scan. a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
   });
@@ -75,7 +75,7 @@ ScansController._handleDeviceScan = function (device, callback) {
       return callback({ internErrorCode: 15, text: 'The device is currently not available'})
     }
     else if (userId && (device.status == "locked" && device.userid != userId)){
-      return callback({ internErrorCode: 16, text: 'The device is already locked by another user'})
+      return callback({ internErrorCode: 16, text: 'The device is already locked. by another user'})
     }
     else if (!userId && device.status == "inuse"){
       device.release(callback);
