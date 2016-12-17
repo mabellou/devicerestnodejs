@@ -44,9 +44,9 @@ ScansController.create = function(req, res) {
            ScansController._handleDeviceScan(device, function(err, assigned, released) {
             if (err) { return callbackError(err); }
             if (released)
-              return CommonController._sendEvent(false, res, {message: { code: 2, text: "Enjoy the device."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
+              return CommonController._sendEvent(false, res, {message: { code: 2, text: "Please return the device in the rack."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
 
-            return CommonController._sendEvent(false, res, {message: { code: 3, text: "Thanks and. good day."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
+            return CommonController._sendEvent(false, res, {message: { code: 3, text: "The device has been registered to your name."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
            });  
          });
         }
