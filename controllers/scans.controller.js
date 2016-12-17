@@ -21,7 +21,7 @@ ScansController.create = function(req, res) {
       Device.findByBadge(req.body.badgeId, function(err, device) {
         if (err) { return CommonController._sendEvent(true, res, err); }
         if (!device) {
-          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'BadgeId not found'});
+          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'BadgeId "'+ req.body.badgeId + '"not found'});
         }
         else {
           console.log("Device found");
