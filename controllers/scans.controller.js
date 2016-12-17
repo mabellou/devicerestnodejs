@@ -35,7 +35,7 @@ ScansController.create = function(req, res) {
       Device.findByBadge(req.body.badgeId, function(err, device) {
         if (err) { callbackError(err) }
         if (!device) {
-          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badgeId '+ req.body.badgeId + ' is not known by the system'});
+          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badgeId. '+ req.body.badgeId + '. is not known by the system'});
         }
         else {
           console.log("Device found");
