@@ -55,7 +55,7 @@ ScansController.create = function(req, res) {
     else {
       scan.create("user", user, function(err) {
         if (err) { return callbackError(err); }
-        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello, please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
   });

@@ -5,41 +5,44 @@ var scansURL = 'http://localhost:8001/api/v1/scans';
 
 frisby.create('Send a User scan')
   .post(scansURL, {
-  badgeId: "U9101011"
+  badgeId: "U9101011",
+  key: "thiskeyisnottoomuchsecure"
   },
   { json: true },
   { headers: { 'Content-Type': 'application/json' }
   })
   .expectStatus(200)
-  .expectHeader('Content-Length','0')
+  .expectJSONTypes('message', {
+    code: Number,
+    text: String,
+    sound: Boolean,
+    voice: Boolean
+  })
+  .expectJSON('message', {
+    code: 4
+  })
 
   .after(function (res) {
 
     frisby.create('Assign the device to the user')
       .post(scansURL, {
-      badgeId: "1039"
+      badgeId: "1039",
+      key: "thiskeyisnottoomuchsecure"
       },
       { json: true },
       { headers: { 'Content-Type': 'application/json' }
       })
       .expectStatus(200)
-      .expectHeader('Content-Length','0')
-
-      .after(function (res) {
-
-        frisby.create('Free the device')
-          .post(scansURL, {
-          badgeId: "1039"
-          },
-          { json: true },
-          { headers: { 'Content-Type': 'application/json' }
-          })
-          .expectStatus(200)
-          .expectHeader('Content-Length','0')
-
-        .toss();
-
+      .expectJSONTypes('message', {
+        code: Number,
+        text: String,
+        sound: Boolean,
+        voice: Boolean
       })
+      .expectJSON('message', {
+        code: 3
+      })
+
     .toss();
 
   })
@@ -48,7 +51,8 @@ frisby.create('Send a User scan')
 
 frisby.create('Send a scan that does not exist (error: 8)')
   .post(scansURL, {
-    badgeId: "99999999"
+    badgeId: "99999999",
+    key: "thiskeyisnottoomuchsecure"
     },
     { json: true },
     { headers: { 'Content-Type': 'application/json' }
@@ -66,7 +70,8 @@ frisby.create('Send a scan that does not exist (error: 8)')
 
 frisby.create('Send a scan without badgeId (error: 7)')
   .post(scansURL, {
-    scanId: "1040"
+    scanId: "1040",
+    key: "thiskeyisnottoomuchsecure"
     },
     { json: true },
     { headers: { 'Content-Type': 'application/json' }
