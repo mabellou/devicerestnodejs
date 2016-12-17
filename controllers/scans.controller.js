@@ -55,7 +55,7 @@ ScansController.create = function(req, res) {
     else {
       scan.create("user", user, function(err) {
         if (err) { return callbackError(err); }
-        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello. Please scan. a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello, please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
   });
@@ -74,13 +74,13 @@ ScansController._handleDeviceScan = function (device, callback) {
       return callback({ internErrorCode: 15, text: 'The device is currently not available'})
     }
     else if (userId && (device.status == "locked" && device.userid != userId)){
-      return callback({ internErrorCode: 16, text: 'The device is already locked. by another user'})
+      return callback({ internErrorCode: 16, text: 'The device is already locked by another user'})
     }
     else if (!userId && device.status == "inuse"){
       device.release(callback);
     }
     else if (!userId && device.status != "inuse"){
-      return callback({ internErrorCode: 13, text: 'The device was not assigned. Please. Badge first a user.'})
+      return callback({ internErrorCode: 13, text: 'The device was not assigned. Please, badge first a user.'})
     }
     else{
       return callback("unknown error")
