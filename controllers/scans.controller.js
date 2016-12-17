@@ -13,7 +13,7 @@ ScansController.create = function(req, res) {
 
 	var self = this;
   if (!req.body.badgeId) {
-    return CommonController._sendEvent(true, res, { internErrorCode: 7, text: 'The badgeId does not contain the badge id.'});
+    return CommonController._sendEvent(true, res, { internErrorCode: 7, text: 'The badge does not contain the badge id.'});
   }
   console.log("badgeid --> ", req.body.badgeId);
   user.findByBadge(req.body.badgeId, function(err, user) {
@@ -34,7 +34,7 @@ ScansController.create = function(req, res) {
       Device.findByBadge(req.body.badgeId, function(err, device) {
         if (err) { return callbackError(err); }
         if (!device) {
-          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badge id. '+ req.body.badgeId + '. is not known by the system'});
+          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badge or the device. '+ req.body.badgeId + '. is not known by the system'});
         }
         else {
           console.log("Device found");
