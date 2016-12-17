@@ -23,7 +23,7 @@ this.assignTo = function(userId, callback) {
     con.query('insert into device_status_user (deviceid, userid, status, startdate) values (?, ?, "inuse", NOW())', [self.id, userId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      callback(null);
+      callback(null, true, false);
     });
   });  
 };
@@ -34,7 +34,7 @@ this.release = function(callback) {
     con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [self.id, "available"], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      callback(null);
+      callback(null, false, true);
     });
   });  
 };

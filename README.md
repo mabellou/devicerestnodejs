@@ -16,9 +16,15 @@ API Error List:
 12: You are not authorized to change the assignement of another user than yourself (OK)
 13: Device is not assigned (OK)
 14: Input validation error: $input validation error message
+15: Device unavailable 
+16: Device locked by another user
+17: The key is not correct
 
 
 
 API scan message list
 
-message: { code: 8, text: "BadgeId not found"}
+1: error
+2: a device has been sent back
+3: a device has been taken by a user
+4: a user has been scanned, we wait a device

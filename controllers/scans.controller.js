@@ -7,30 +7,47 @@ var ScansController = function () {
 } 
 
 ScansController.create = function(req, res) {
+
+  if(req.body.key !== "thiskeyisnottoomuchsecure")
+    return CommonController._sendEvent(true, res, { internErrorCode: 17, text: 'The key is not correct'});
+
 	var self = this;
   if (!req.body.badgeId) {
-    return CommonController._sendEvent(true, res, { internErrorCode: 7, text: 'Bad Request: Missing badgeId'});
+    return CommonController._sendEvent(true, res, { internErrorCode: 7, text: 'The badgeId does not contain the badge id.'});
   }
   console.log("badgeid --> ", req.body.badgeId);
   user.findByBadge(req.body.badgeId, function(err, user) {
+    var callbackError = function (err) {
+      if (err) { 
+        console.log("==> Initial Error ==> ", err);
+        if(!err.internErrorCode)
+          return CommonController._sendEvent(true, res, { internErrorCode: 1, text: 'Technical error. Please contact the administrator.' });
+        else
+          return CommonController._sendEvent(true, res, err);
+      }
+    }
+
     if (err) { 
-      return CommonController._sendEvent(true, res, err);
+      callbackError(err)
     }
     if (!user) {
       console.log("User not found");
       Device.findByBadge(req.body.badgeId, function(err, device) {
-        if (err) { return CommonController._sendEvent(true, res, err); }
+        if (err) { callbackError(err) }
         if (!device) {
-          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'BadgeId '+ req.body.badgeId + ' not found'});
+          return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badgeId '+ req.body.badgeId + ' is not known by the system'});
         }
         else {
           console.log("Device found");
           scan.create("device", device, function(err) {
-           if (err) { return CommonController._sendEvent(true, res, err); }
+           if (err) { callbackError(err) }
 
-           ScansController._handleDeviceScan(device, function(err) {
-             if (err) { return CommonController._sendEvent(true, res, err); }
-             return CommonController._sendEvent(false, res, {message: { code: 1, text: "Device found"}}, "A <b>device</b> has been scanned (" + device.badgeid + ").");
+           ScansController._handleDeviceScan(device, function(err, assigned, released) {
+            if (err) { callbackError(err) }
+            if (released)
+              return CommonController._sendEvent(false, res, {message: { code: 2, text: "Enjoy the device."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
+
+            return CommonController._sendEvent(false, res, {message: { code: 3, text: "Thanks and good day."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
            });  
          });
         }
@@ -38,8 +55,8 @@ ScansController.create = function(req, res) {
     } 
     else {
       scan.create("user", user, function(err) {
-        if (err) { return CommonController._sendEvent(true, res, err); }
-        return CommonController._sendEvent(false, res, {message: { code: 1, text: "User found"}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        if (err) { callbackError(err) }
+        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello. Please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
   });
@@ -47,28 +64,29 @@ ScansController.create = function(req, res) {
 
 ScansController._handleDeviceScan = function (device, callback) {
 	scan.findActiveUserId(function(err, userId) {
-   if (err) { return callback(err); }
-   if (	userId && 
+    if (err) { return callback(err); }
+    
+    if (	userId && 
     (device.status == "available" || device.status == "inuse" || (device.status == "locked" && 
       device.userid == userId))) {
-    device.assignTo(userId, callback);
-}
-else if (userId && device.status == "unavailable"){
-  return callback("Device unavailable")
-}
-else if (userId && (device.status == "locked" && device.userid != userId)){
-  return callback("Device locked by another user")
-}
-else if (!userId && device.status == "inuse"){
-  device.release(callback);
-}
-else if (!userId && device.status != "inuse"){
-  return callback({ internErrorCode: 13, text: 'Device is not assigned'})
-}
-else{
-  return callback("unknown error")
-}
-});
+      device.assignTo(userId, callback);
+    }
+    else if (userId && device.status == "unavailable"){
+      return callback({ internErrorCode: 15, text: 'The device is currently not available'})
+    }
+    else if (userId && (device.status == "locked" && device.userid != userId)){
+      return callback({ internErrorCode: 16, text: 'The device is already locked by another user'})
+    }
+    else if (!userId && device.status == "inuse"){
+      device.release(callback);
+    }
+    else if (!userId && device.status != "inuse"){
+      return callback({ internErrorCode: 13, text: 'The device was not assigned'})
+    }
+    else{
+      return callback("unknown error")
+    }
+  });
 };
 
 module.exports = ScansController;

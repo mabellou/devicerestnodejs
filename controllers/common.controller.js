@@ -21,14 +21,16 @@ CommonController._sendError = function(res, message, httpCode){
 
   var errorMessage = null;
   console.log("error message ->", message);
-  if(message && message.internErrorCode){
+
+  if(message && message.internErrorCode && message.sound){
+    errorMessage = { error : { code: message.internErrorCode, text: message.text, sound: message.sound, voice: message.voice } };
+  }
+  else if(message && message.internErrorCode){
     errorMessage = { error : { code: message.internErrorCode, text: message.text } } ;
-    CommonController._displayResponse(httpCode, errorMessage);
   }
   else {
     errorMessage = { error : { code: 1, text: "Technical error" } } ;
     console.log('==> Initial Error ==> ', message);
-    CommonController._displayResponse(httpCode, errorMessage);
   }
 
 	return res.status(httpCode).send(errorMessage);
@@ -48,13 +50,18 @@ CommonController._sendEvent = function(err, res, message, event){
   var messageToSend;
 
   if(!err){
+    message.message.sound = true;
+    message.message.voice = true;
     CommonController._sendResponse(res, message, false);
     messageToSend = event;
   }
   else {
+    message.sound = true;
+    message.voice = true;
     CommonController._sendError(res, message);
     messageToSend = "<b>Error</b> : " + JSON.stringify(message.text) + " (code:" + JSON.stringify(message.internErrorCode) + ").";
   }
+
   request({
     headers: {
       'Content-Type': 'application/json'
@@ -71,3 +78,6 @@ CommonController._sendEvent = function(err, res, message, event){
 };
 
 module.exports = CommonController;
+
+
+
