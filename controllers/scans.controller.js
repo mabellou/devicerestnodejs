@@ -80,7 +80,7 @@ ScansController._handleDeviceScan = function (device, callback) {
       device.release(callback);
     }
     else if (!userId && device.status != "inuse"){
-      return callback({ internErrorCode: 13, text: 'The device was not assigned'})
+      return callback({ internErrorCode: 13, text: 'The device was not assigned. Please. Badge first a user.'})
     }
     else{
       return callback("unknown error")
