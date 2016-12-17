@@ -27,23 +27,22 @@ ScansController.create = function(req, res) {
       }
     }
 
-    if (err) { 
-      callbackError(err)
-    }
+    if (err) { return callbackError(err);}
+
     if (!user) {
       console.log("User not found");
       Device.findByBadge(req.body.badgeId, function(err, device) {
-        if (err) { callbackError(err) }
+        if (err) { return callbackError(err); }
         if (!device) {
           return CommonController._sendEvent(true, res, { internErrorCode: 8, text: 'The badge id. '+ req.body.badgeId + '. is not known by the system'});
         }
         else {
           console.log("Device found");
           scan.create("device", device, function(err) {
-           if (err) { callbackError(err) }
+           if (err) { return callbackError(err); }
 
            ScansController._handleDeviceScan(device, function(err, assigned, released) {
-            if (err) { callbackError(err) }
+            if (err) { return callbackError(err); }
             if (released)
               return CommonController._sendEvent(false, res, {message: { code: 2, text: "Enjoy the device."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
 
@@ -55,7 +54,7 @@ ScansController.create = function(req, res) {
     } 
     else {
       scan.create("user", user, function(err) {
-        if (err) { callbackError(err) }
+        if (err) { return callbackError(err); }
         return CommonController._sendEvent(false, res, {message: { code: 4, text: "Hello. Please scan. a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
       });  
     }
