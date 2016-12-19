@@ -57,7 +57,7 @@ CommonController._sendEvent = function(err, res, message, event){
   }
   else {
     message.sound = true;
-    message.voice = true;
+    message.voice = false;
     CommonController._sendError(res, message);
     messageToSend = "<b>Error</b> : " + JSON.stringify(message.text) + " (code:" + JSON.stringify(message.internErrorCode) + ").";
     if (event)
