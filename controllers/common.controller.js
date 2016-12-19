@@ -51,7 +51,7 @@ CommonController._sendEvent = function(err, res, message, event){
 
   if(!err){
     message.message.sound = true;
-    message.message.voice = true;
+    message.message.voice = false;
     CommonController._sendResponse(res, message, false);
     messageToSend = event;
   }
