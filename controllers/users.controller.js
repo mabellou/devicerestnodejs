@@ -158,6 +158,8 @@ UsersController.update = function(req, res) {
 						console.log("The following badge has been create: ", req.body.badgeid);
 						return callback(err);
 					});
+        else
+        	callback(null);
 	    }
 	],
 	function(err) { 

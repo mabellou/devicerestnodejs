@@ -31,6 +31,7 @@ module.exports = {
     apiRoutes.get('/api/v1/users', UsersController.index);
     apiRoutes.get('/api/v1/user/:id', UsersController.show);
     apiRoutes.post('/api/v1/user', UsersController.create);
+    apiRoutes.put('/api/v1/user/:id', UsersController.update);
 
     apiRoutes.get('/api/v1/devices', DevicesController.index);
 

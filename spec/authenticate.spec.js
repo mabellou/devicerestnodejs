@@ -109,7 +109,7 @@ frisby.create('Authenticate with wrong password (error: 4)')
 
 frisby.create('Authenticate with user not found (error: 3)')
   .post(authURL,
-    { username: 'tester02', password: 'azerty' },
+    { username: 'tester99', password: 'azerty' },
     { json: true },
     { headers: { 'Content-Type': 'application/json' }
   })

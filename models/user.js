@@ -92,7 +92,7 @@ User.update = function(user, userid, callback) {
       if (err) { 
         return callback(err); 
       }
-      user.userid = userid;
+      user.userid = Number(userid);
 
       con.release();
       callback();

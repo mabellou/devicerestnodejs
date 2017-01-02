@@ -32,13 +32,15 @@ INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `sta
 ('2', 'incubator01', 'Caroline', 'Lopse', '2', '2016-01-01 08:32:22', null, 'azerty'),
 ('3', 'business01', 'Vincent', 'Ipsum', '3', '2016-01-01 08:32:22', null, 'azerty'),
 ('4', 'tester01', 'Marwan', 'Bellouti', '4', '2016-01-01 08:32:22', null, 'azerty'),
-('5', 'savi01', 'Marc', 'Vermeir', '5', '2016-01-01 08:32:22', null, 'azerty');
+('5', 'savi01', 'Marc', 'Vermeir', '5', '2016-01-01 08:32:22', null, 'azerty'),
+('6', 'tester02', 'tobeupdated', 'tobeupdated', '4', '2016-01-01 08:32:22', null, 'azerty');
 
 INSERT INTO `user_badge` (`userid`, `badgeid`, `startdate`) VALUES
 ('1', 'U9101011', '2016-01-01 08:32:22'),
 ('2', 'U9101012', '2016-01-01 08:32:22'),
 ('3', 'U9101013', '2016-01-01 08:32:22'),
-('4', 'U9101014', '2016-01-01 08:32:22');
+('4', 'U9101014', '2016-01-01 08:32:22'),
+('6', 'U9101016', '2016-01-01 08:32:22');;
 
 INSERT INTO `device_status_user` (`deviceid`, `userid`, `status`, `startdate`, `enddate`) VALUES
 ('1', '2', 'locked', '2016-03-01 11:22:22', null),

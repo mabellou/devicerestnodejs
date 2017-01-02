@@ -1,6 +1,8 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+-- dump db: mysqldump -h vhw3t8e71xdz9k14.cbetxkdyhwsb.us-east-1.rds.amazonaws.com -P 3306 -u tyrprj1alvv0rp4p -pm0ejv1kotn6bdv7h ah3dpz0d67278it9 > backup.sql
+
 --
 -- Table structure for table `user_profile`
 --
