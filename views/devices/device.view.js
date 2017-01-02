@@ -23,6 +23,7 @@ function render(device){
 		type: device.type,
 		statusobject: {
 			status: device.status,
+			statusdate: device.statusdate ? moment(device.statusdate).format("DD/MM/YYYY HH:mm:ss") : null,
 			userobject: renderUserObject(device)
 		}
 	};
