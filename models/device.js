@@ -10,10 +10,11 @@ function Device(attributes) {
   if( (!this.status) || 
     (this.status == "inuse" && this.enddate) || 
     (this.status == "locked" && moment(this.statusdate).isBefore(moment().subtract(15, 'minutes')))){
+    
     this.status = "available";
-  this.userid = null;
-  this.firstname = null;
-  this.lastname = null;
+    this.userid = null;
+    this.firstname = null;
+    this.lastname = null;
 }
 
 
@@ -80,11 +81,12 @@ Device.findAll = function(callback) {
 
 Device.findAllUsedOrLocked = function(callback) {
   connection.acquire(function(err, con) {
-    con.query('select deviceid, status, userid from device left join (select deviceid, userid, status, last_status.startdate as statusdate, firstname, lastname from (Select dsu.deviceid, dsu.userid, dsu.status, dsu2.startdate From device_status_user dsu Inner Join (Select deviceid,max(startdate) as startdate From device_status_user Group By deviceid) dsu2 On dsu.deviceid = dsu2.deviceid And dsu.startdate = dsu2.startdate) last_status left join user on user.id = last_status.userid)  last_device_user on device.id = last_device_user.deviceid where (status=? or status=?)', ['locked', 'inuse'], function(err, rows) {
+    con.query('select deviceid, status, userid, statusdate from device left join (select deviceid, userid, status, last_status.startdate as statusdate, firstname, lastname from (Select dsu.deviceid, dsu.userid, dsu.status, dsu2.startdate From device_status_user dsu Inner Join (Select deviceid,max(startdate) as startdate From device_status_user Group By deviceid) dsu2 On dsu.deviceid = dsu2.deviceid And dsu.startdate = dsu2.startdate) last_status left join user on user.id = last_status.userid)  last_device_user on device.id = last_device_user.deviceid where (status=? or status=?)', ['locked', 'inuse'], function(err, rows) {
       if (err) { return callback(err, rows); }
       var devices = rows.map(function (row) {
         return new Device(row);
       });
+      console.log("device long: ", devices);
       callback(null, devices);
       con.release();
     });
