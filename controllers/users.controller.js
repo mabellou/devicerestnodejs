@@ -142,20 +142,17 @@ UsersController.update = function(req, res) {
 	async.series([
 	    function(callback) {
 				User.findById(req.params.id, function(err) {
-					console.log("The following id has been foundbyid: ", req.params.id);
 					callback(err);
 				});
 	    },
 	    function(callback) {
         User.update(user, req.params.id,function(err) {
-					console.log("The following id has been updated: ", req.params.id);
 					callback(err);
 				});
 	    },
 	    function(callback) {
         if(req.body.badgeid)
         	User.createBadge(user, function(err) {
-						console.log("The following badge has been create: ", req.body.badgeid);
 						return callback(err);
 					});
         else

@@ -85,9 +85,6 @@ User.update = function(user, userid, callback) {
     dataUpdate.push(user.enddate);
     dataUpdate.push(userid);
 
-    console.log("The queryUpdate: ", queryUpdate);
-    console.log("The dataUpdate: ", dataUpdate);
-
     con.query(queryUpdate, dataUpdate, function(err, rows) {
       if (err) { 
         return callback(err); 
