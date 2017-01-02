@@ -49,6 +49,57 @@ User.create = function(user, callback) {
   });  
 };
 
+User.update = function(user, userid, callback) {
+  connection.acquire(function(err, con) {
+
+    if (user.enddate && moment(user.enddate, "DD/MM/YYYY").isValid())
+      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD");
+    else
+      user.enddate = null;
+
+    var queryUpdate = "UPDATE user SET ";
+    var dataUpdate = [];
+
+    if(user.username){
+      queryUpdate = queryUpdate + "username = ?, ";
+      dataUpdate.push(user.username);
+    }
+    if(user.password){
+      queryUpdate = queryUpdate + "password = ?, ";
+      dataUpdate.push(user.password);
+    }
+    if(user.firstname){
+      queryUpdate = queryUpdate + "firstname = ?, ";
+      dataUpdate.push(user.firstname);
+    }
+    if(user.lastname){
+      queryUpdate = queryUpdate + "lastname = ?, ";
+      dataUpdate.push(user.lastname);
+    }
+    if(user.profile){
+      queryUpdate = queryUpdate + "profileid = ?, ";
+      dataUpdate.push(Profile.findIdByProfile(user.profile));
+    }
+    
+    queryUpdate = queryUpdate + "enddate = ? " + "WHERE id = ?";
+    dataUpdate.push(user.enddate);
+    dataUpdate.push(userid);
+
+    console.log("The queryUpdate: ", queryUpdate);
+    console.log("The dataUpdate: ", dataUpdate);
+
+    con.query(queryUpdate, dataUpdate, function(err, rows) {
+      if (err) { 
+        return callback(err); 
+      }
+      user.userid = userid;
+
+      con.release();
+      callback();
+    });
+  });  
+};
+
 User.createBadge = function(user, callback) {
   connection.acquire(function(err, con) {
     con.query('INSERT INTO user_badge (userid, badgeid, startdate) VALUES (?, ?, NOW())', [user.userid, user.badgeid], function(err) {

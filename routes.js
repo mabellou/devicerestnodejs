@@ -11,11 +11,14 @@ module.exports = {
     // To delete
     app.get('/api/v1/users', UsersController.index);
     app.get('/api/v1/user/:id', UsersController.show);
-    app.get('/api/v1/devices', DevicesController.index);
-    app.post('/api/v1/scans', ScansController.create); 
     app.post('/api/v1/user', UsersController.create);
+    app.put('/api/v1/user/:id', UsersController.update);
+
+    app.get('/api/v1/devices', DevicesController.index);
+
+    app.post('/api/v1/scans', ScansController.create); 
     app.post('/api/v1/device/status', DeviceStatusController.create);
-    //
+
     app.post('/api/v1/authenticate', UsersController.authenticate);
 
     var apiRoutes = express.Router(); 
@@ -23,12 +26,15 @@ module.exports = {
     apiRoutes.use(UsersController.verifyAuthenticate);
 
     apiRoutes.get('/check', UsersController.check);
-    apiRoutes.post('/check', UsersController.check);
+    apiRoutes.post('/check', UsersController.check); 
+
     apiRoutes.get('/api/v1/users', UsersController.index);
     apiRoutes.get('/api/v1/user/:id', UsersController.show);
-    apiRoutes.get('/api/v1/devices', DevicesController.index);
-    apiRoutes.post('/api/v1/scans', ScansController.create);
     apiRoutes.post('/api/v1/user', UsersController.create);
+
+    apiRoutes.get('/api/v1/devices', DevicesController.index);
+
+    apiRoutes.post('/api/v1/scans', ScansController.create);
     apiRoutes.post('/api/v1/device/status', DeviceStatusController.create);
 
     app.use('/private', apiRoutes);  

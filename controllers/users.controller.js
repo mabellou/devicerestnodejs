@@ -85,7 +85,9 @@ UsersController.create = function(req, res) {
 		return CommonController._sendError(res, { internErrorCode: 2, text: 'You are not authorized to call this URL'});
 
 	var user = req.body;
-	var callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
+	var callback = function (err, status) {
+		if (err) { return CommonController._sendError(res, err); }
+	};
 
 	async.series([
 	    function(callback) {
@@ -101,7 +103,68 @@ UsersController.create = function(req, res) {
 	],
 	function(err) { 
 			if (err) return callback(err);
-			CommonController._sendResponse(res, { id: user.userid}, false);
+			else
+				CommonController._sendResponse(res, { id: user.userid}, false);
+	});
+
+};
+
+UsersController.update = function(req, res) {
+	var self = this;
+
+	if(req.body.username)
+		req.checkBody('username', "username is too long or not a string").isLt255().isString();
+	if(req.body.password)
+		req.checkBody('password', "password is too long or not a string").isLt255().isString();
+	if(req.body.badgeid)
+		req.checkBody('badgeid', "badgeid is too long or not a string").isLt255().isString();
+	if(req.body.firstname)
+		req.checkBody('firstname', "firstname is too long or not a string").isLt255().isString();
+	if(req.body.lastname)
+		req.checkBody('lastname', "lastname is too long or not a string").isLt255().isString();
+	if(req.body.profile)
+		req.checkBody('profile', "profile is too long or not a string").isLt255().isString();
+	if(req.body.enddate)
+		req.checkBody('enddate', "enddate is not the right format. It should be DD/MM/YYYY").isDDMMYYYY();
+	
+	var validationErrors = req.validationErrors();
+  if (validationErrors) {
+    return CommonController._sendError(res, { internErrorCode: 15, text: 'Input validation error: ' + validationErrors[0].msg});
+  }
+
+
+	if (!UsersController.isAdmin(req.decoded, res))
+		return CommonController._sendError(res, { internErrorCode: 2, text: 'You are not authorized to call this URL'});
+
+	var user = req.body;
+	var callback = function (err) {if (err) { return CommonController._sendError(res, err); }};
+
+	async.series([
+	    function(callback) {
+				User.findById(req.params.id, function(err) {
+					console.log("The following id has been foundbyid: ", req.params.id);
+					callback(err);
+				});
+	    },
+	    function(callback) {
+        User.update(user, req.params.id,function(err) {
+					console.log("The following id has been updated: ", req.params.id);
+					callback(err);
+				});
+	    },
+	    function(callback) {
+        if(req.body.badgeid)
+        	User.createBadge(user, function(err) {
+						console.log("The following badge has been create: ", req.body.badgeid);
+						return callback(err);
+					});
+	    }
+	],
+	function(err) { 
+			if (err) 
+				return callback(err);
+			else
+				CommonController._sendResponse(res, { id: user.userid}, false);
 	});
 
 };

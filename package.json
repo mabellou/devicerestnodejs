@@ -16,6 +16,8 @@
     "express-validator": "^3.0.0",
     "forever": "^0.15.3",
     "frisby": "^0.8.5",
+    "jasmine": "^2.5.2",
+    "jasmine-node-debug": "^0.1.1",
     "jsonwebtoken": "^7.1.9",
     "moment": "2.15.2",
     "morgan": "^1.7.0",
