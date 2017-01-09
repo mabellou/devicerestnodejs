@@ -1,0 +1,55 @@
+Device creation:
+
+Request:
+
+{
+	"boxid": 121,
+	"brand": "Apple",
+	"model": "Iphone 6",
+	"os": "IOS",
+	"osversion": "10.1.1",
+	"screensize": "4 inch",
+	"type": "smartphone",
+	"location": "locker",
+	"wifipassword": "test",
+	"wifiid": "azerty",
+	"comment": "salut, je suis Marwan",
+	"profile": "tester",
+	"imei": "1242142141",
+	"serialnumber": "4534254325",
+	"badgeid": "342432"
+}
+
+Response:
+
+{
+	"id": 14
+}
+
+Device Update
+
+Request:
+
+{
+	"boxid": 121,
+	"brand": "Apple",
+	"model": "Iphone 6",
+	"os": "IOS",
+	"osversion": "10.1.1",
+	"screensize": "4 inch",
+	"type": "smartphone",
+	"location": "locker",
+	"wifipassword": "test",
+	"wifiid": "azerty",
+	"comment": "salut, je suis Marwan",
+	"profile": "tester",
+	"imei": "1242142141",
+	"serialnumber": "4534254325",
+	"badgeid": "342432"
+}
+
+Response:
+
+{
+	"id": 14
+}

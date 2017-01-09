@@ -30,6 +30,9 @@ DeviceStatus.create = function(deviceStatus, callback) {
     else if(deviceStatus.statusobject.status == "unavailable") {
       con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.status], createCallback);
     }
+    else if(deviceStatus.statusobject.status == "deleted") {
+      con.query('insert into device_status_user (deviceid, userid, status, startdate, enddate) values (?,null,?,NOW(),null)', [deviceStatus.id, deviceStatus.statusobject.status], createCallback);
+    }
     else {
       callback("The status is not a valid status");
     }

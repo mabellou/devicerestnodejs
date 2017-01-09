@@ -21,6 +21,10 @@ function render(device){
 		osversion: device.osversion,
 		screensize: device.screensize,
 		type: device.type,
+		location: device.location,
+		wifiid: device.wifiid,
+		wifipassword : device.wifipassword,
+		comment: device.comment,
 		statusobject: {
 			status: device.status,
 			statusdate: device.statusdate ? moment(device.statusdate).format("DD/MM/YYYY HH:mm:ss") : null,

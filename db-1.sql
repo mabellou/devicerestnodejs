@@ -31,10 +31,25 @@ CREATE TABLE IF NOT EXISTS `device` (
   `serialnumber` varchar(255),
   `profileid` int,
   `type` varchar(255),
+  `wifiid` varchar(255),
+  `wifipassword` varchar(255),
+  `location` varchar(255),
+  `comment` varchar(1024),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`profileid`) REFERENCES user_profile(`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
+-- ALTER TABLE device
+-- ADD `wifiid` varchar(255);
+
+-- ALTER TABLE device
+-- ADD `wifipassword` varchar(255);
+
+-- ALTER TABLE device
+-- ADD `location` varchar(255);
+
+-- ALTER TABLE device
+-- ADD `comment` varchar(1024);
 
 --
 -- Table structure for table `user`

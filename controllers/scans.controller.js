@@ -73,6 +73,9 @@ ScansController._handleDeviceScan = function (device, callback) {
     else if (userId && device.status == "unavailable"){
       return callback({ internErrorCode: 15, text: 'The device is currently not available.'})
     }
+    else if (userId && device.status == "deleted"){
+      return callback({ internErrorCode: 18, text: 'The device has been deleted.'})
+    }
     else if (userId && (device.status == "locked" && device.userid != userId)){
       return callback({ internErrorCode: 16, text: 'The device is already locked by another user.'})
     }

@@ -197,11 +197,14 @@ UsersController.check = function(req, res) {
 
 UsersController.verifyAuthenticate = function(req, res, next) {
 	var token = req.body.token || req.query['token'] || req.headers['x-access-token'];
+	if (process.env.DEBUG === true) {
+		return next();
+	}
 
 	if (token) {
 
 		// verifies secret and checks exp
-		jwt.verify(token, 'thisistoomuchsecure', function(err, decoded) {			
+		jwt.verify(token, process.env.JWT_PRIVATE_KEY, function(err, decoded) {			
 			if (err) {
 				return CommonController._sendError(res, { internErrorCode: 5, text: 'Failed to authenticate token'});	
 			} else {

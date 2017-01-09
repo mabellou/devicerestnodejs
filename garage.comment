@@ -1,0 +1,23 @@
+
+4) PUT, POST, DELETE of a device
+
+5) Change a bit websocket
+
+6) Add two columns to Device:
+
+wifiid
+wifipassword
+location
+
+7) refactor the code following the comment of Spin47
+
+- validation at model view and not at controller level
+- authentication
+
+
+
+
+
+
+
+

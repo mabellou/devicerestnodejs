@@ -160,7 +160,7 @@ User.createJwtToken = function(user, callback) {
     username: user.username,
     profile: Profile.findProfileById(user.profileid)
   };
-  var token = jwt.sign(payload, 'thisistoomuchsecure', {
+  var token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {
     expiresIn : 60*60*12 // expires in 24 hours
   }, callback);
 

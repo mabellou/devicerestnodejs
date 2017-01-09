@@ -7,11 +7,18 @@ var routes = require('./routes');
 var cors = require('cors');
 var expressValidator = require('express-validator');
 var moment = require('moment');
+var env = process.env.NODE_ENV || "development";
 
  
 var app = express();
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
+if (env === "development") {
+  process.env.JWT_PRIVATE_KEY = "toomuchsecuretoken"
+} else if (!process.env.JWT_PRIVATE_KEY) {
+  throw "Missing JWT_PRIVATE_KEY env var" 
+}
+
 
 //app.use(morgan('dev'));
 app.use(expressValidator({
@@ -27,8 +34,13 @@ app.use(expressValidator({
      },
      isString: function(value) {
         return (typeof value === 'string' || value instanceof String || value === "" || value == null);
+     },
+     isProfile: function(value) {
+        if (value === 'administrator' || value === 'incubator' || value === 'business' || value === 'tester' || value === 'savi')
+          return true;
+        else
+          return false;
      }
-
   }
 }));
 

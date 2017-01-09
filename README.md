@@ -21,6 +21,9 @@ API Error List:
 15: Device unavailable 
 16: Device locked by another user
 17: The key is not correct
+18: The device has been deleted
+19: The device already exists
+20: The device does not exist
 
 
 

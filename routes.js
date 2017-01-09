@@ -15,11 +15,15 @@ module.exports = {
     app.put('/api/v1/user/:id', UsersController.update);
 
     app.get('/api/v1/devices', DevicesController.index);
+    app.post('/api/v1/device', DevicesController.create);
+    app.put('/api/v1/device/:id', DevicesController.update);
+
 
     app.post('/api/v1/scans', ScansController.create); 
     app.post('/api/v1/device/status', DeviceStatusController.create);
 
     app.post('/api/v1/authenticate', UsersController.authenticate);
+
 
     var apiRoutes = express.Router(); 
 
@@ -34,6 +38,8 @@ module.exports = {
     apiRoutes.put('/api/v1/user/:id', UsersController.update);
 
     apiRoutes.get('/api/v1/devices', DevicesController.index);
+    apiRoutes.post('/api/v1/device', DevicesController.create);
+    apiRoutes.put('/api/v1/device/:id', DevicesController.update);
 
     apiRoutes.post('/api/v1/scans', ScansController.create);
     apiRoutes.post('/api/v1/device/status', DeviceStatusController.create);

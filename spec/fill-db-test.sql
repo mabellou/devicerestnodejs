@@ -25,7 +25,8 @@ INSERT INTO `device` (`id`, `boxid`, `brand`, `model`, `os`, `osversion`, `scree
 ('7', '127','Sony', 'XPeria XA', 'Android', '4.2.2', '6 inch', '405067', '1037', '102030405067', 'D9101017', '4', 'smartphone'),
 ('8', '128','Huawei', 'Nova', 'Android', '5.1.6', '5 inch', '405068', '1038', '102030405068', 'D9101018', '4', 'smartphone'),
 ('9', '129','ZTE', 'Blade V7', 'Android', '6.1.4', '4 inch', '405069', '1039', '102030405069', 'D9101019', '5', 'smartphone'),
-('10', '130','Acer', 'Liquid', 'Android', '5.0.2', '4 inch', '405070', '1040', '102030405070', 'D9101020', '5', 'smartphone');
+('10', '130','Acer', 'Liquid', 'Android', '5.0.2', '4 inch', '405070', '1040', '102030405070', 'D9101020', '5', 'smartphone'),
+('11', '131','tobeupdated', 'tobeupdated', 'tobeupdated', '5.0.2', '4 inch', 'test', '1040', '102030405070', 'D9101020', '5', 'tobeupdated');
 
 INSERT INTO `user` (`id`, `username`, `firstname`, `lastname`, `profileid`, `startdate`, `enddate`, `password`) VALUES
 ('1', 'admin01', 'Bernard', 'Craigh', '1', '2016-01-01 08:32:22', null, 'azerty'),

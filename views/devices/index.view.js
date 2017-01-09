@@ -18,14 +18,14 @@ function render(devices, profile) {
 	if (profile == 'business') {
 		devices = devices.filter(function (el) {
   			return  el.profileid === Profile.findIdByProfile('business') && 
-  					el.status != 'unavailable';
+  					el.status != 'unavailable' && el.status != 'deleted';
 		});
 	}
 
 	if (profile == 'tester') {
 		devices = devices.filter(function (el) {
   			return  el.profileid === Profile.findIdByProfile('tester') && 
-  					el.status != 'unavailable';
+  					el.status != 'unavailable' && el.status != 'deleted';
 		});
 	}
 
@@ -33,7 +33,7 @@ function render(devices, profile) {
 		devices = devices.filter(function (el) {
   			return  (el.profileid === Profile.findIdByProfile('savi') ||
   					el.profileid === Profile.findIdByProfile('tester')) && 
-  					el.status != 'unavailable';
+  					el.status != 'unavailable' && el.status != 'deleted';
 		});
 	}
 
