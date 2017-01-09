@@ -25,7 +25,7 @@ this.assignTo = function(userId, callback) {
     con.query('insert into device_status_user (deviceid, userid, status, startdate) values (?, ?, "inuse", NOW())', [self.id, userId], function(err, rows) {
       if (err) { return callback(err); }
       con.release();
-      callback(null, true, false);
+      callback(null, true, false, userId);
     });
   });  
 };

@@ -1,5 +1,6 @@
 var user = require('../models/user');
 var Device = require('../models/device');
+var User = require('../models/user');
 var scan = require('../models/scan');
 var CommonController = require('./common.controller.js');
 
@@ -41,13 +42,17 @@ ScansController.create = function(req, res) {
           scan.create("device", device, function(err) {
            if (err) { return callbackError(err); }
 
-           ScansController._handleDeviceScan(device, function(err, assigned, released) {
+           ScansController._handleDeviceScan(device, function(err, assigned, released, userId) {
             if (err) { return callbackError(err); }
-            if (released)
-              return CommonController._sendEvent(false, res, {message: { code: 2, text: "Please return the device in the rack."}}, "A <b>device</b> has been released (" + device.badgeid + ").");
 
-            return CommonController._sendEvent(false, res, {message: { code: 3, text: "The device has been registered to your name."}}, "A <b>device</b> has been assigned to user (" + device.badgeid + ").");
-           });  
+            if (released)
+              return CommonController._sendEvent(false, res, {message: { code: 2, text: "Please return the device in the rack."}}, "A <b>device</b> (" + device.badgeid + " - Box Id: " + device.boxid + ") has been released by user (" + device.firstname + " " + device.lastname + ").");
+            else
+              User.findById(userId, function(err, userInfo) {
+                if (err) { return callbackError(err); }
+                return CommonController._sendEvent(false, res, {message: { code: 3, text: "The device has been registered to your name."}}, "A <b>device</b> (" + device.badgeid + " - Box Id: " + device.boxid + ") has been assigned to user (" + userInfo.firstname + " " + userInfo.lastname + ").");
+              });
+            }); 
          });
         }
       });
@@ -55,7 +60,7 @@ ScansController.create = function(req, res) {
     else {
       scan.create("user", user, function(err) {
         if (err) { return callbackError(err); }
-        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + ").");
+        return CommonController._sendEvent(false, res, {message: { code: 4, text: "Please scan a device."}}, "A <b>user</b> has been scanned (" + user.badgeid + " - " + user.firstname + " " + user.lastname + ").");
       });  
     }
   });
