@@ -8,19 +8,7 @@ var express 	= require('express');
 module.exports = {
   configure: function(app) {
 
-    // To delete
-    app.get('/api/v1/users', UsersController.index);
-    app.get('/api/v1/user/:id', UsersController.show);
-    app.post('/api/v1/user', UsersController.create);
-    app.put('/api/v1/user/:id', UsersController.update);
-
-    app.get('/api/v1/devices', DevicesController.index);
-    app.post('/api/v1/device', DevicesController.create);
-    app.put('/api/v1/device/:id', DevicesController.update);
-
-
     app.post('/api/v1/scans', ScansController.create); 
-    app.post('/api/v1/device/status', DeviceStatusController.create);
 
     app.post('/api/v1/authenticate', UsersController.authenticate);
 

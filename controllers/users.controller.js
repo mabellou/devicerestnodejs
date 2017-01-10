@@ -5,6 +5,7 @@ var userView = require("../views/users/user.view");
 var async = require('async');
 var jwt = require('jsonwebtoken');
 var CommonController = require('./common.controller.js');
+var env = process.env.NODE_ENV || "development";
 
 var UsersController = function () {
 } 
@@ -197,7 +198,9 @@ UsersController.check = function(req, res) {
 
 UsersController.verifyAuthenticate = function(req, res, next) {
 	var token = req.body.token || req.query['token'] || req.headers['x-access-token'];
-	if (process.env.DEBUG === true) {
+
+	if (process.env.DEBUG === 'true') {
+		console.log('test to login debug');
 		return next();
 	}
 
