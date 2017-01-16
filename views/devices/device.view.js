@@ -25,6 +25,10 @@ function render(device){
 		wifiid: device.wifiid,
 		wifipassword : device.wifipassword,
 		comment: device.comment,
+		profile: device.profile,
+		badgeid: device.badgeid,
+		imei: device.imei,
+		serialnumber: device.serialnumber,
 		statusobject: {
 			status: device.status,
 			statusdate: device.statusdate ? moment(device.statusdate).format("DD/MM/YYYY HH:mm:ss") : null,
