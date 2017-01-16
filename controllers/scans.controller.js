@@ -1,8 +1,10 @@
 var user = require('../models/user');
-var Device = require('../models/device');
 var User = require('../models/user');
+var Device = require('../models/device');
 var scan = require('../models/scan');
 var CommonController = require('./common.controller.js');
+var Statistics = require('../models/statistics');
+var async = require('async');
 
 var ScansController = function () {
 } 
@@ -43,6 +45,9 @@ ScansController.create = function(req, res) {
            if (err) { return callbackError(err); }
 
            ScansController._handleDeviceScan(device, function(err, assigned, released, userId) {
+            console.log("Device assigned ",  assigned);
+            console.log("Device realesed",  released);
+            console.log("Device userid" , userId);
             if (err) { return callbackError(err); }
 
             if (released)
@@ -73,7 +78,29 @@ ScansController._handleDeviceScan = function (device, callback) {
     if (	userId && 
     (device.status == "available" || device.status == "inuse" || (device.status == "locked" && 
       device.userid == userId))) {
-      device.assignTo(userId, callback);
+
+      async.series([
+        function(callback) {
+          device.assignTo(userId, callback);
+        },
+        function(callback) {
+          Device.findById(device.id, function(err, deviceCurr) {
+            if(deviceCurr)
+              device = deviceCurr;
+            callback();
+          });
+        },
+        function(callback) {
+          Statistics.create("DeviceBrand", device.brand, function(err) { 
+            callback();
+          });
+        }
+        ],
+        function(err, results) { 
+          if (err) { return callback(err); }
+          callback(null, results[0][0], results[0][1], results[0][2]);
+      });
+      
     }
     else if (userId && device.status == "unavailable"){
       return callback({ internErrorCode: 15, text: 'The device is currently not available.'})

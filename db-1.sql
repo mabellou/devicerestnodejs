@@ -39,6 +39,13 @@ CREATE TABLE IF NOT EXISTS `device` (
   FOREIGN KEY (`profileid`) REFERENCES user_profile(`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
+
+CREATE TABLE IF NOT EXISTS `statistics` (
+  `type` varchar(255),
+  `value` varchar(255),
+  `timestamp` datetime
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
 -- ALTER TABLE device
 -- ADD `wifiid` varchar(255);
 

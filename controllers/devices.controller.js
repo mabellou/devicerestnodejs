@@ -2,6 +2,7 @@ var Device = require('../models/device');
 var indexView = require('../views/devices/index.view');
 var CommonController = require('./common.controller.js');
 var UsersController = require('./users.controller.js');
+var Statistics = require('../models/statistics');
 var async = require('async');
 
 var DevicesController = function () {
