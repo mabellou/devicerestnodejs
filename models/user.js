@@ -28,7 +28,7 @@ User.create = function(user, callback) {
   connection.acquire(function(err, con) {
 
     if (user.enddate && moment(user.enddate, "DD/MM/YYYY").isValid())
-      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD");
+      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD 23:59:59");
     else
       user.enddate = null;
 
@@ -53,7 +53,7 @@ User.update = function(user, userid, callback) {
   connection.acquire(function(err, con) {
 
     if (user.enddate && moment(user.enddate, "DD/MM/YYYY").isValid())
-      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD");
+      user.enddate = moment(user.enddate, 'DD/MM/YYYY').format("YYYY-MM-DD  23:59:59");
     else
       user.enddate = null;
 
