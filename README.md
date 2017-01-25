@@ -2,6 +2,7 @@
 
 To run test: jasmine-node spec/
 
+
 API Error List:
 
 1: Technical error

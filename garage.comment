@@ -1,18 +1,14 @@
 
-4) PUT, POST, DELETE of a device
+DEV
+---
 
-5) Change a bit websocket
+mysqldump -h tkck4yllxdrw0bhi.cbetxkdyhwsb.us-east-1.rds.amazonaws.com -P 3306 -u f6k1nzlyv3i11dqt -pom39zbi65di6p4jv g0iredidhu6mae2k > backup.sql
 
-6) Add two columns to Device:
 
-wifiid
-wifipassword
-location
+PROD
+----
 
-7) refactor the code following the comment of Spin47
-
-- validation at model view and not at controller level
-- authentication
+mysqldump -h vhw3t8e71xdz9k14.cbetxkdyhwsb.us-east-1.rds.amazonaws.com -P 3306 -u tyrprj1alvv0rp4p -pm0ejv1kotn6bdv7h ah3dpz0d67278it9 > backup.sql
 
 
 
